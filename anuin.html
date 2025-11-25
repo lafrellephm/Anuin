@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anuin App - Full Features</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: { 50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81' },
+                        accent: { 50: '#fffbeb', 100: '#fef3c7', 500: '#f59e0b', 600: '#d97706', 700: '#b45309' }
+                    },
+                    boxShadow: { 'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)' }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+        body { -webkit-tap-highlight-color: transparent; }
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+    </style>
+</head>
+<body class="bg-slate-100 flex justify-center font-sans antialiased selection:bg-primary-200">
+
+    <div class="w-full max-w-md bg-slate-50 shadow-2xl min-h-screen relative overflow-hidden mx-auto border-x border-slate-200">
+
+        <div id="page-login" class="page-section fade-in">
+            <div class="min-h-screen flex items-center justify-center p-6 bg-white">
+                <div class="w-full">
+                    <div class="text-center mb-10">
+                        <div class="mb-6 flex justify-center">
+                           <div class="text-6xl">🛠️</div>
+                        </div>
+                        <h1 class="text-4xl font-extrabold text-primary-700 mb-2">ANUIN</h1>
+                        <p class="text-slate-500 font-medium">Jembatan Tepercaya untuk Jasa Anda</p>
+                    </div>
+                    <div class="space-y-5">
+                        <input type="email" placeholder="Email atau Nomor HP" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:border-primary-500 focus:outline-none transition-all font-medium">
+                        <input type="password" placeholder="Password" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:border-primary-500 focus:outline-none transition-all font-medium">
+                        <button onclick="loginUser()" class="w-full bg-gradient-to-r from-primary-600 to-primary-500 text-white py-4 rounded-xl font-bold text-lg hover:from-primary-700 hover:to-primary-600 shadow-lg active:scale-[0.98] transition-transform">Masuk</button>
+                    </div>
+                    <div class="text-center mt-8">
+                        <p class="text-slate-500 font-medium">Belum punya akun?</p>
+                        <button onclick="navigateTo('page-register')" class="text-primary-600 font-bold hover:text-primary-800 transition">Daftar Sekarang</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-register" class="page-section hidden fade-in">
+            <div class="min-h-screen flex items-center justify-center p-6 bg-white">
+                <div class="w-full">
+                    <button onclick="navigateTo('page-login')" class="mb-6 text-slate-400 hover:text-primary-600 transition"><i data-lucide="chevron-left" class="w-7 h-7"></i></button>
+                    <div class="text-center mb-8">
+                        <h1 class="text-3xl font-bold text-primary-700 mb-2">Daftar Akun</h1>
+                        <p class="text-slate-500 font-medium">Bergabung dengan komunitas ANUIN</p>
+                    </div>
+                    <div class="space-y-4">
+                        <input type="text" placeholder="Nama Lengkap" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl font-medium">
+                        <input type="email" placeholder="Email" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl font-medium">
+                        <input type="password" placeholder="Password" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl font-medium">
+                        <button onclick="loginUser()" class="w-full bg-gradient-to-r from-primary-600 to-primary-500 text-white py-4 rounded-xl font-bold text-lg hover:from-primary-700 hover:to-primary-600 shadow-lg active:scale-[0.98] mt-2">Daftar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-home" class="page-section hidden fade-in bg-slate-50 min-h-screen pb-24">
+            <div class="bg-gradient-to-br from-primary-600 to-indigo-600 text-white p-6 pb-10 rounded-b-[2.5rem] shadow-soft relative overflow-hidden">
+                <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+                <div class="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-primary-400/20 rounded-full blur-2xl"></div>
+                <div class="flex justify-between items-center mb-8 relative z-10">
+                    <div>
+                        <h2 class="text-2xl font-bold mb-1">Halo, <span id="user-name-display">User</span> 👋</h2>
+                        <p class="text-primary-100 font-medium">Apa yang Anda butuhkan?</p>
+                    </div>
+                    <div class="w-12 h-12 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full flex items-center justify-center text-2xl shadow-sm">👤</div>
+                </div>
+                <div class="relative z-10">
+                    <i data-lucide="search" class="absolute left-5 top-1/2 -translate-y-1/2 text-primary-300 w-5"></i>
+                    <input type="text" placeholder="Cari jasa (cth: Servis AC)..." onclick="navigateTo('page-search')" class="w-full pl-14 pr-5 py-4 rounded-2xl bg-white/95 text-slate-800 font-medium focus:outline-none shadow-lg placeholder:text-slate-400" readonly>
+                </div>
+            </div>
+
+            <div class="mt-8 mx-6 relative rounded-[1.5rem] overflow-hidden shadow-lg group h-40 bg-slate-800">
+                <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=800&auto=format&fit=crop" alt="Promo" class="w-full h-full object-cover opacity-60">
+                <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 p-5 text-white z-10 w-full h-full flex flex-col justify-center items-start">
+                    <div class="bg-accent-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full inline-flex items-center gap-1 mb-2 animate-pulse">
+                        <i data-lucide="percent" class="w-3 h-3"></i> Promo Baru
+                    </div>
+                    <h4 class="text-2xl font-extrabold mb-1 leading-tight">Diskon Jasa 30% 🔥</h4>
+                    <p class="text-slate-200 font-medium mb-3 text-xs">Khusus pengguna baru.</p>
+                    <button class="bg-white/20 backdrop-blur-md text-white text-xs font-bold px-4 py-2 rounded-lg border border-white/40 flex items-center gap-1 active:scale-95">Ambil Promo <i data-lucide="arrow-right" class="w-3 h-3"></i></button>
+                </div>
+            </div>
+
+            <div class="px-6 mt-10">
+                <div class="flex justify-between items-center mb-5">
+                    <h3 class="text-xl font-bold text-slate-800">Layanan Populer</h3>
+                    <button onclick="navigateTo('page-search')" class="text-primary-600 text-sm font-bold flex items-center gap-1 hover:text-primary-800">Lihat Semua <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <button onclick="filterService('Servis AC')" class="bg-blue-100 text-blue-600 p-5 rounded-[1.5rem] flex flex-col items-start hover:shadow-md transition active:scale-[0.98]">
+                        <div class="text-4xl mb-3">❄️</div>
+                        <p class="font-bold">Servis AC</p>
+                    </button>
+                    <button onclick="filterService('Listrik')" class="bg-yellow-100 text-yellow-600 p-5 rounded-[1.5rem] flex flex-col items-start hover:shadow-md transition active:scale-[0.98]">
+                        <div class="text-4xl mb-3">⚡</div>
+                        <p class="font-bold">Listrik</p>
+                    </button>
+                    <button onclick="filterService('Bersih')" class="bg-green-100 text-green-600 p-5 rounded-[1.5rem] flex flex-col items-start hover:shadow-md transition active:scale-[0.98]">
+                        <div class="text-4xl mb-3">🧹</div>
+                        <p class="font-bold">Bersih Rumah</p>
+                    </button>
+                    <button onclick="filterService('Angkut')" class="bg-orange-100 text-orange-600 p-5 rounded-[1.5rem] flex flex-col items-start hover:shadow-md transition active:scale-[0.98]">
+                        <div class="text-4xl mb-3">📦</div>
+                        <p class="font-bold">Angkut</p>
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-[1.5rem] p-6 shadow-sm border border-slate-100 w-full mb-8">
+                    <h4 class="font-bold text-lg text-slate-800 mb-5">Mengapa Memilih ANUIN?</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4"><div class="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center shrink-0"><i data-lucide="shield" class="text-primary-600 w-5"></i></div><div><p class="font-bold text-slate-800 text-sm">Terverifikasi</p><p class="text-xs text-slate-500">Mitra resmi & aman.</p></div></div>
+                        <div class="flex items-start gap-4"><div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center shrink-0"><i data-lucide="dollar-sign" class="text-green-600 w-5"></i></div><div><p class="font-bold text-slate-800 text-sm">Harga Transparan</p><p class="text-xs text-slate-500">Tidak ada biaya gaib.</p></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-search" class="page-section hidden fade-in bg-slate-50 min-h-screen pb-24">
+            <div class="bg-gradient-to-br from-primary-600 to-indigo-600 text-white p-6 pt-8 pb-10 rounded-b-[2.5rem] shadow-soft">
+                <div class="flex items-center gap-4">
+                    <button onclick="navigateTo('page-home')" class="hover:bg-white/20 p-2 rounded-full"><i data-lucide="chevron-left" class="w-7 h-7"></i></button>
+                    <h2 class="text-2xl font-bold">Cari Jasa</h2>
+                </div>
+            </div>
+            <div class="p-6">
+                <p class="text-slate-600 font-medium mb-5">Penyedia Jasa Tersedia</p>
+                <div class="space-y-5" id="worker-list-container">
+                    </div>
+            </div>
+        </div>
+
+        <div id="page-detail" class="page-section hidden fade-in bg-slate-50 min-h-screen pb-32">
+            <div class="bg-gradient-to-br from-primary-600 to-indigo-600 text-white p-6 pt-8 pb-28 rounded-b-[2.5rem] relative">
+                <button onclick="navigateTo('page-search')" class="hover:bg-white/20 p-2 rounded-full relative z-10"><i data-lucide="chevron-left" class="w-7 h-7"></i></button>
+            </div>
+            <div class="px-6 -mt-20 relative w-full z-20">
+                <div class="bg-white rounded-[2rem] shadow-xl p-6 border border-slate-100">
+                    <div class="flex items-start gap-5 mb-6">
+                        <div class="w-28 h-28 bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl flex items-center justify-center text-6xl shrink-0 shadow-inner border-4 border-white" id="detail-image">👨‍🔧</div>
+                        <div class="flex-1 pt-2">
+                            <h2 class="text-2xl font-bold text-slate-800" id="detail-name">Nama</h2>
+                            <p class="text-primary-600 font-bold text-sm bg-primary-50 inline-block px-3 py-1 rounded-full mb-3" id="detail-service">Jasa</p>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="star" class="w-5 h-5 text-accent-500 fill-accent-500"></i>
+                                <span class="font-bold text-slate-800 text-lg" id="detail-rating">0.0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 mb-6">
+                        <div class="bg-primary-50 rounded-2xl p-3 text-center border border-primary-100"><i data-lucide="clock" class="mx-auto text-primary-600 mb-2 w-6"></i><p class="text-[10px] text-slate-500 font-bold uppercase">Pengalaman</p><p class="font-bold text-slate-800">5 Thn</p></div>
+                        <div class="bg-green-50 rounded-2xl p-3 text-center border border-green-100"><i data-lucide="check-circle" class="mx-auto text-green-600 mb-2 w-6"></i><p class="text-[10px] text-slate-500 font-bold uppercase">Job</p><p class="font-bold text-slate-800">100+</p></div>
+                        <div class="bg-accent-50 rounded-2xl p-3 text-center border border-accent-100"><i data-lucide="award" class="mx-auto text-accent-600 mb-2 w-6"></i><p class="text-[10px] text-slate-500 font-bold uppercase">Rating</p><p class="font-bold text-slate-800">4.9</p></div>
+                    </div>
+                    <div class="border-t border-slate-100 pt-5">
+                        <div class="flex items-center gap-3 mb-4 bg-slate-50 p-4 rounded-xl"><i data-lucide="map-pin" class="text-primary-500 w-6 h-6"></i><p class="text-slate-700 font-medium" id="detail-location">Lokasi</p></div>
+                        <div class="flex justify-between items-center bg-primary-50 p-4 rounded-xl border border-primary-100">
+                            <span class="text-slate-600 font-medium">Harga/jam</span>
+                            <p class="text-3xl font-extrabold text-primary-700" id="detail-price">Rp 0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="fixed bottom-0 left-0 right-0 p-6 bg-white/90 backdrop-blur-md border-t border-slate-100 shadow-lg z-30 max-w-md mx-auto rounded-t-[2rem]">
+                <div class="flex gap-4">
+                    <button onclick="startChat()" class="flex-1 bg-primary-50 text-primary-700 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-primary-100 active:scale-[0.98]"><i data-lucide="message-circle" class="w-5"></i> Chat</button>
+                    <button onclick="navigateTo('page-booking')" class="flex-[2] bg-gradient-to-r from-primary-600 to-primary-500 text-white py-4 rounded-2xl font-bold text-lg hover:from-primary-700 hover:to-primary-600 shadow-lg active:scale-[0.98]">Booking</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-booking" class="page-section hidden fade-in bg-slate-50 min-h-screen pb-24">
+            <div class="bg-gradient-to-br from-primary-600 to-indigo-600 text-white p-6 pt-8 pb-10 rounded-b-[2.5rem] shadow-soft">
+                <div class="flex items-center gap-4">
+                    <button onclick="navigateTo('page-detail')" class="hover:bg-white/20 p-2 rounded-full"><i data-lucide="chevron-left" class="w-7 h-7"></i></button>
+                    <h2 class="text-2xl font-bold">Form Booking</h2>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="bg-white rounded-[1.5rem] p-5 mb-6 shadow-sm border border-slate-100 flex items-center gap-5">
+                    <div class="w-16 h-16 bg-primary-50 rounded-2xl flex items-center justify-center text-3xl shrink-0" id="booking-worker-image">👨‍🔧</div>
+                    <div>
+                        <p class="font-bold text-xl text-slate-800" id="booking-worker-name">Nama</p>
+                        <p class="text-primary-600 font-bold text-sm bg-primary-50 inline-block px-2 py-0.5 rounded-full" id="booking-worker-service">Jasa</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 space-y-6">
+                    <div>
+                        <label class="block text-slate-700 font-bold mb-3">Pilih Tanggal & Waktu</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="relative">
+                                <i data-lucide="calendar" class="absolute left-4 top-1/2 -translate-y-1/2 text-primary-400 w-5"></i>
+                                <input type="date" class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-2xl focus:border-primary-500 focus:outline-none bg-slate-50 font-medium text-slate-700 text-sm">
+                            </div>
+                            <div class="relative">
+                                <i data-lucide="clock" class="absolute left-4 top-1/2 -translate-y-1/2 text-primary-400 w-5"></i>
+                                <input type="time" class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-2xl focus:border-primary-500 focus:outline-none bg-slate-50 font-medium text-slate-700 text-sm">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 font-bold mb-3">Alamat Lengkap</label>
+                        <div class="relative">
+                            <i data-lucide="map-pin" class="absolute left-4 top-4 text-primary-400 w-5"></i>
+                            <textarea placeholder="Masukkan alamat lengkap dan patokan..." class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-2xl focus:border-primary-500 focus:outline-none bg-slate-50 font-medium text-slate-700 h-28 resize-none"></textarea>
+                        </div>
+                    </div>
+                    <button onclick="submitBooking()" class="w-full bg-gradient-to-r from-primary-600 to-primary-500 text-white py-5 rounded-2xl font-bold text-xl hover:from-primary-700 hover:to-primary-600 shadow-lg active:scale-[0.98]">Konfirmasi Booking</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-booking-success" class="page-section hidden fade-in">
+            <div class="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+                <div class="bg-white rounded-[2rem] shadow-2xl p-8 max-w-md w-full text-center border border-slate-100">
+                    <div class="w-28 h-28 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
+                        <i data-lucide="check-circle" class="text-green-500 w-16 h-16"></i>
+                    </div>
+                    <h2 class="text-3xl font-extrabold text-slate-800 mb-3">Booking Berhasil!</h2>
+                    <p class="text-slate-600 mb-8 font-medium">Pesanan Anda telah kami terima.</p>
+                    <div class="space-y-4">
+                        <button onclick="navigateTo('page-history')" class="w-full bg-gradient-to-r from-primary-600 to-primary-500 text-white py-4 rounded-xl font-bold text-lg shadow-md active:scale-[0.98]">Lihat Riwayat</button>
+                        <button onclick="navigateTo('page-home')" class="w-full bg-slate-100 text-slate-700 py-4 rounded-xl font-bold text-lg border border-slate-200 active:scale-[0.98]">Kembali ke Beranda</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-history" class="page-section hidden fade-in bg-slate-50 min-h-screen pb-24">
+            <div class="bg-gradient-to-br from-primary-600 to-indigo-600 text-white p-6 pt-8 pb-10 rounded-b-[2.5rem] shadow-soft">
+                <h2 class="text-2xl font-bold">Riwayat Pesanan</h2>
+            </div>
+            <div class="p-6 space-y-5" id="history-list-container">
+                </div>
+            <BottomNav active="history" />
+        </div>
+
+        <div id="page-profile" class="page-section hidden fade-in bg-slate-50 min-h-screen pb-24">
+            <div class="bg-gradient-to-br from-primary-600 to-indigo-600 text-white p-6 pt-8 pb-20 rounded-b-[2.5rem] shadow-soft relative overflow-hidden">
+                <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+                <h2 class="text-2xl font-bold mb-6 relative z-10">Profil Saya</h2>
+                <div class="flex items-center gap-5 relative z-10">
+                    <div class="w-20 h-20 bg-white/20 backdrop-blur-sm border-2 border-white/50 rounded-full flex items-center justify-center text-4xl shadow-lg">👤</div>
+                    <div>
+                        <p class="text-2xl font-extrabold mb-1" id="profile-name">User</p>
+                        <p class="text-primary-100 font-medium bg-primary-700/30 px-3 py-1 rounded-full inline-block text-sm">user@anuin.com</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 -mt-12 space-y-5 relative z-20">
+                <div class="bg-white rounded-[1.5rem] shadow-lg overflow-hidden border border-slate-100">
+                    <button class="w-full flex items-center gap-5 p-5 hover:bg-slate-50 transition border-b border-slate-100">
+                        <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center shrink-0"><i data-lucide="user" class="text-primary-600 w-6"></i></div>
+                        <div class="flex-1 text-left"><p class="font-bold text-slate-800 text-lg">Edit Profil</p></div>
+                        <i data-lucide="chevron-right" class="text-slate-300 w-5"></i>
+                    </button>
+                    <button class="w-full flex items-center gap-5 p-5 hover:bg-slate-50 transition border-b border-slate-100">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center shrink-0"><i data-lucide="phone" class="text-green-600 w-6"></i></div>
+                        <div class="flex-1 text-left"><p class="font-bold text-slate-800 text-lg">Kontak Darurat</p></div>
+                        <i data-lucide="chevron-right" class="text-slate-300 w-5"></i>
+                    </button>
+                </div>
+                <div class="bg-white rounded-[1.5rem] shadow-lg overflow-hidden border border-slate-100">
+                     <button class="w-full flex items-center gap-5 p-5 hover:bg-slate-50 transition border-b border-slate-100">
+                        <div class="w-12 h-12 bg-accent-100 rounded-full flex items-center justify-center shrink-0"><i data-lucide="shield" class="text-accent-600 w-6"></i></div>
+                        <div class="flex-1 text-left"><p class="font-bold text-slate-800 text-lg">Keamanan</p></div>
+                        <i data-lucide="chevron-right" class="text-slate-300 w-5"></i>
+                    </button>
+                </div>
+                <button onclick="navigateTo('page-login')" class="w-full bg-red-50 text-red-600 py-5 rounded-[1.5rem] font-bold text-lg hover:bg-red-100 transition border border-red-100 shadow-sm mt-4">Keluar Akun</button>
+            </div>
+        </div>
+
+        <div id="page-chat" class="page-section hidden fade-in bg-slate-50 min-h-screen flex flex-col h-screen">
+            <div class="bg-gradient-to-br from-primary-600 to-indigo-600 text-white p-6 pt-8 pb-6 rounded-b-[2rem] flex items-center gap-4 shrink-0 shadow-md z-10">
+                <button onclick="navigateTo('page-detail')" class="hover:bg-white/20 p-2 rounded-full"><i data-lucide="chevron-left" class="w-6 h-6"></i></button>
+                <div>
+                    <h2 class="text-xl font-bold" id="chat-header-name">Worker</h2>
+                    <p class="text-primary-100 text-sm">Online</p>
+                </div>
+            </div>
+            <div id="chat-container" class="flex-1 overflow-y-auto p-6 space-y-4 pb-24"></div>
+            <div class="bg-white border-t p-4 pb-8 rounded-t-[2rem] shadow-lg shrink-0">
+                <div class="flex gap-3 items-center">
+                    <input type="text" id="message-input" placeholder="Tulis pesan..." class="flex-1 px-5 py-4 border rounded-2xl focus:border-primary-500 focus:outline-none bg-slate-50 font-medium">
+                    <button onclick="sendMessage()" class="bg-primary-600 text-white p-4 rounded-2xl hover:bg-primary-700 shadow-md active:scale-90 transition"><i data-lucide="send" class="w-6 h-6"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div id="bottom-nav" class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur border-t max-w-md mx-auto rounded-t-[2rem] hidden z-40 pb-2">
+            <div class="flex justify-around items-center py-4">
+                <button onclick="navigateTo('page-home')" id="nav-home" class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-primary-600 transition-colors">
+                    <i data-lucide="home" class="w-6 h-6"></i><span class="text-[10px] font-bold uppercase">Beranda</span>
+                </button>
+                <button onclick="navigateTo('page-search')" id="nav-search" class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-primary-600 transition-colors">
+                    <i data-lucide="search" class="w-6 h-6"></i><span class="text-[10px] font-bold uppercase">Cari</span>
+                </button>
+                <button onclick="navigateTo('page-history')" id="nav-history" class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-primary-600 transition-colors">
+                    <i data-lucide="history" class="w-6 h-6"></i><span class="text-[10px] font-bold uppercase">Riwayat</span>
+                </button>
+                <button onclick="navigateTo('page-profile')" id="nav-profile" class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-primary-600 transition-colors">
+                    <i data-lucide="user" class="w-6 h-6"></i><span class="text-[10px] font-bold uppercase">Profil</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Data Worker & History Dummy
+        const workers = [
+            { id: 1, name: 'Budi Santoso', service: 'Servis AC', rating: 4.8, price: 'Rp 75.000', location: 'Keputih, 1.2 km', image: '👨‍🔧', jobs: 200, reviews: 156 },
+            { id: 2, name: 'Ahmad Yani', service: 'Tukang Listrik', rating: 4.9, price: 'Rp 60.000', location: 'Gebang, 0.8 km', image: '⚡', jobs: 350, reviews: 203 },
+            { id: 3, name: 'Siti Nurhaliza', service: 'Bersih Rumah', rating: 4.7, price: 'Rp 50.000', location: 'Mulyorejo, 1.5 km', image: '🧹', jobs: 180, reviews: 142 },
+            { id: 4, name: 'Joko Widodo', service: 'Jasa Angkut', rating: 4.6, price: 'Rp 45.000', location: 'Sukolilo, 2.1 km', image: '📦', jobs: 190, reviews: 98 },
+            { id: 5, name: 'Rina Kartika', service: 'Tukang Cat', rating: 4.5, price: 'Rp 80.000', location: 'Klampis, 1.0 km', image: '🎨', jobs: 220, reviews: 88 },
+        ];
+
+        const historyData = [
+            { id: 1, worker: 'Budi Santoso', service: 'Servis AC', date: '15 Nov 2024', status: 'Selesai', rating: 5, price: 'Rp 75.000' },
+            { id: 2, worker: 'Ahmad Yani', service: 'Tukang Listrik', date: '10 Nov 2024', status: 'Selesai', rating: 5, price: 'Rp 60.000' },
+            { id: 3, worker: 'Siti Nurhaliza', service: 'Bersih Rumah', date: '05 Nov 2024', status: 'Selesai', rating: 4, price: 'Rp 50.000' },
+        ];
+
+        let selectedWorker = null;
+
+        // --- NAVIGATION SYSTEM ---
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page-section').forEach(page => page.classList.add('hidden'));
+            document.getElementById(pageId).classList.remove('hidden');
+            window.scrollTo(0,0);
+
+            // Handle Bottom Nav Visibility
+            const nav = document.getElementById('bottom-nav');
+            const mainPages = ['page-home', 'page-search', 'page-history', 'page-profile'];
+            
+            if (mainPages.includes(pageId)) {
+                nav.classList.remove('hidden');
+                updateActiveNav(pageId);
+                // Refresh data if needed
+                if(pageId === 'page-history') renderHistory();
+            } else {
+                nav.classList.add('hidden');
+            }
+
+            if(typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        function updateActiveNav(pageId) {
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-primary-600');
+                btn.classList.add('text-slate-400');
+            });
+            const map = { 'page-home': 'nav-home', 'page-search': 'nav-search', 'page-history': 'nav-history', 'page-profile': 'nav-profile' };
+            const activeBtn = document.getElementById(map[pageId]);
+            if(activeBtn) {
+                activeBtn.classList.remove('text-slate-400');
+                activeBtn.classList.add('text-primary-600');
+            }
+        }
+
+        function loginUser() {
+            // Simulasi Login
+            document.getElementById('user-name-display').innerText = "John Doe";
+            document.getElementById('profile-name').innerText = "John Doe";
+            navigateTo('page-home');
+        }
+
+        // --- RENDER WORKERS (SEARCH PAGE) ---
+        function renderWorkers(filterText = '') {
+            const container = document.getElementById('worker-list-container');
+            container.innerHTML = ''; 
+
+            const filtered = workers.filter(w => 
+                filterText === '' || 
+                w.service.toLowerCase().includes(filterText.toLowerCase()) || 
+                w.name.toLowerCase().includes(filterText.toLowerCase())
+            );
+
+            filtered.forEach(worker => {
+                const card = document.createElement('button');
+                card.className = "w-full bg-white rounded-[1.5rem] p-5 shadow-sm hover:shadow-md transition-all border border-slate-100 active:scale-[0.99] text-left mb-4";
+                card.onclick = () => showWorkerDetail(worker);
+                
+                card.innerHTML = `
+                    <div class="flex gap-4 items-start">
+                        <div class="w-20 h-20 bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl flex items-center justify-center text-4xl shrink-0 shadow-inner">${worker.image}</div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-xl text-slate-800">${worker.name}</h3>
+                            <p class="text-primary-600 font-bold text-xs bg-primary-50 inline-block px-2 py-1 rounded-full mb-2">${worker.service}</p>
+                            <div class="flex items-center gap-2 text-sm text-slate-500 mb-1">
+                                <i data-lucide="star" class="w-4 h-4 text-accent-500 fill-accent-500"></i>
+                                <span class="font-bold text-slate-800">${worker.rating}</span>
+                                <span>| ${worker.location}</span>
+                            </div>
+                            <p class="text-primary-700 font-extrabold text-lg">${worker.price}<span class="text-xs font-normal text-slate-400">/jam</span></p>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function filterService(serviceName) {
+            navigateTo('page-search');
+            renderWorkers(serviceName);
+        }
+
+        // --- RENDER HISTORY ---
+        function renderHistory() {
+            const container = document.getElementById('history-list-container');
+            container.innerHTML = '';
+            
+            historyData.forEach(order => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-[1.5rem] p-5 shadow-sm border border-slate-100";
+                
+                // Bintang Rating
+                let starsHTML = '';
+                for(let i=0; i<5; i++) {
+                    starsHTML += `<i data-lucide="star" class="w-4 h-4 ${i < order.rating ? 'text-accent-500 fill-accent-500' : 'text-slate-200'}"></i>`;
+                }
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="font-bold text-lg text-slate-800">${order.worker}</p>
+                            <p class="text-primary-600 font-bold text-xs bg-primary-50 inline-block px-2 py-1 rounded-full mt-1">${order.service}</p>
+                        </div>
+                        <span class="bg-green-100 text-green-700 text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider">${order.status}</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-sm text-slate-600 font-medium mb-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <div class="flex items-center gap-1"><i data-lucide="calendar" class="w-4 h-4 text-primary-400"></i><span>${order.date}</span></div>
+                        <div class="w-px h-4 bg-slate-300"></div>
+                        <div class="font-bold text-slate-800">${order.price}</div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+                        <span class="text-xs text-slate-500 font-medium">Rating:</span>
+                        <div class="flex gap-0.5">${starsHTML}</div>
+                    </div>
+                    <button class="w-full mt-4 bg-white text-primary-700 py-3 rounded-xl font-bold border border-primary-200 hover:bg-primary-50 transition active:scale-[0.98]">Pesan Lagi</button>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // --- DETAIL & BOOKING LOGIC ---
+        function showWorkerDetail(worker) {
+            selectedWorker = worker;
+            // Update UI Detail Page
+            document.getElementById('detail-name').innerText = worker.name;
+            document.getElementById('detail-service').innerText = worker.service;
+            document.getElementById('detail-rating').innerText = worker.rating;
+            document.getElementById('detail-price').innerText = worker.price + "/jam";
+            document.getElementById('detail-location').innerText = worker.location;
+            document.getElementById('detail-image').innerText = worker.image;
+            
+            // Update UI Booking Page (Pre-fill)
+            document.getElementById('booking-worker-name').innerText = worker.name;
+            document.getElementById('booking-worker-service').innerText = worker.service;
+            document.getElementById('booking-worker-image').innerText = worker.image;
+
+            navigateTo('page-detail');
+        }
+
+        function submitBooking() {
+            // Simulasi loading atau validasi bisa ditaruh sini
+            navigateTo('page-booking-success');
+        }
+
+        // --- CHAT LOGIC ---
+        function startChat() {
+            if(!selectedWorker) return;
+            document.getElementById('chat-header-name').innerText = selectedWorker.name;
+            document.getElementById('chat-container').innerHTML = ''; 
+            addMessage('worker', 'Halo! Ada yang bisa saya bantu?');
+            navigateTo('page-chat');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const text = input.value.trim();
+            if (text) {
+                addMessage('user', text);
+                input.value = '';
+                setTimeout(() => addMessage('worker', 'Baik, saya mengerti. Mohon tunggu sebentar ya.'), 1000);
+            }
+        }
+
+        function addMessage(sender, text) {
+            const container = document.getElementById('chat-container');
+            const div = document.createElement('div');
+            div.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-start'} animate-fadeIn`;
+            const bubbleStyle = sender === 'user' ? 'bg-primary-600 text-white rounded-br-none' : 'bg-white text-slate-800 border border-slate-200 rounded-bl-none';
+            div.innerHTML = `<div class="max-w-[80%] rounded-2xl px-5 py-3 font-medium shadow-sm ${bubbleStyle}"><p class="leading-relaxed text-sm">${text}</p></div>`;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        document.getElementById('message-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage() });
+
+        // INIT
+        window.onload = function() {
+            renderWorkers();
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anuin App - Jasa Profesional</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: { 50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81' },
+                        accent: { 50: '#fffbeb', 100: '#fef3c7', 500: '#f59e0b', 600: '#d97706', 700: '#b45309' }
+                    },
+                    boxShadow: { 'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)' }
+                }
+            }
+        }
+    </script>
+    
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.2.0",
+        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+        "lucide-react": "https://esm.sh/lucide-react@0.292.0"
+      }
+    }
+    </script>
+
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+        body { -webkit-tap-highlight-color: transparent; }
+    </style>
+</head>
+<body class="bg-slate-100 flex justify-center font-sans antialiased selection:bg-primary-200">
+
+    <div id="root"></div>
+
+    <script type="text/babel" data-type="module">
+        import React, { useState } from 'react';
+        import { createRoot } from 'react-dom/client';
+        import { Search, Star, MapPin, Clock, MessageCircle, User, Home, History, ChevronLeft, Send, Phone, Mail, Calendar, DollarSign, CheckCircle, Award, Shield, ArrowRight, Percent } from 'lucide-react';
+
+        // --- 1. KOMPONEN DIPINDAHKAN KELUAR (FIX UTAMA) ---
+        // Header dipindah keluar agar bisa dipakai ChatPage yang juga di luar
+        const StandardHeader = ({ title, subtitle, showBack, onBack }) => (
+            <div className="bg-gradient-to-br from-primary-600 to-indigo-600 text-white p-6 pt-8 pb-10 rounded-b-[2.5rem] shadow-soft relative overflow-hidden shrink-0 w-full">
+                <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+                <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-primary-400/20 rounded-full blur-2xl"></div>
+                
+                <div className="relative z-10 flex items-center gap-4">
+                    {showBack && (
+                        <button onClick={onBack} className="hover:bg-white/20 p-2 rounded-full transition">
+                            <ChevronLeft size={28} />
+                        </button>
+                    )}
+                    <div className="flex-1">
+                        <h2 className="text-2xl font-bold leading-tight">{title}</h2>
+                        {subtitle && <p className="text-primary-100 text-sm font-medium mt-1">{subtitle}</p>}
+                    </div>
+                </div>
+            </div>
+        );
+
+        // ChatPage dipindah keluar agar input tidak kehilangan fokus saat mengetik
+        const ChatPage = ({ worker, messages, setMessages, input, setInput, onBack }) => {
+            const handleSend = () => {
+                if (input.trim()) {
+                    const newMsg = { sender: 'user', text: input };
+                    setMessages([...messages, newMsg]);
+                    setInput(''); // Clear input
+                    
+                    // Simulasi balasan worker
+                    setTimeout(() => {
+                        setMessages(prev => [...prev, { sender: 'worker', text: 'Baik, saya mengerti. Ada lagi?' }]);
+                    }, 1000);
+                }
+            };
+
+            return (
+                <div className="min-h-screen bg-slate-50 flex flex-col h-screen">
+                    <StandardHeader 
+                        title={worker?.name || 'Worker'} 
+                        subtitle="Online" 
+                        showBack={true} 
+                        onBack={onBack} 
+                    />
+                    
+                    <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50">
+                        {messages.map((msg, index) => (
+                            <div key={index} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                <div className={`max-w-[75%] rounded-2xl px-5 py-3 font-medium ${msg.sender === 'user' ? 'bg-primary-600 text-white rounded-br-sm shadow-md' : 'bg-white text-slate-800 rounded-bl-sm shadow-sm border border-slate-100'}`}>
+                                    <p className="leading-relaxed">{msg.text}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="bg-white border-t border-slate-100 p-4 pb-6 rounded-t-[2rem] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+                        <div className="flex gap-3 items-center">
+                            <input 
+                                type="text" 
+                                value={input} 
+                                onChange={(e) => setInput(e.target.value)} 
+                                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                                placeholder="Ketik pesan Anda..." 
+                                className="flex-1 px-5 py-4 border border-slate-200 rounded-2xl focus:border-primary-500 focus:ring-2 focus:ring-primary-200 focus:outline-none bg-slate-50 font-medium text-slate-700" 
+                            />
+                            <button 
+                                onClick={handleSend} 
+                                className="bg-primary-600 text-white p-4 rounded-2xl hover:bg-primary-700 transition shadow-md active:scale-[0.95] flex-shrink-0"
+                            >
+                                <Send size={24} />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const AnuinApp = () => {
+            const [currentPage, setCurrentPage] = useState('login');
+            const [userData, setUserData] = useState(null);
+            const [selectedWorker, setSelectedWorker] = useState(null);
+            const [bookingData, setBookingData] = useState(null);
+            const [searchQuery, setSearchQuery] = useState('');
+            
+            // State untuk Chat
+            const [chatMessages, setChatMessages] = useState([]);
+            const [messageInput, setMessageInput] = useState('');
+
+            const promoBannerImage = "./promo.jpg"; 
+
+            const workers = [
+                { id: 1, name: 'Budi Santoso', service: 'Servis AC', rating: 4.8, reviews: 156, price: 'Rp 75.000', location: 'Keputih, 1.2 km', image: '👨‍🔧', verified: true, experience: '5 tahun', jobs: 200 },
+                { id: 2, name: 'Ahmad Yani', service: 'Tukang Listrik', rating: 4.9, reviews: 203, price: 'Rp 60.000', location: 'Gebang, 0.8 km', image: '⚡', verified: true, experience: '7 tahun', jobs: 350 },
+                { id: 3, name: 'Siti Nurhaliza', service: 'Bersih Rumah', rating: 4.7, reviews: 142, price: 'Rp 50.000', location: 'Mulyorejo, 1.5 km', image: '🧹', verified: true, experience: '3 tahun', jobs: 180 },
+                { id: 4, name: 'Joko Widodo', service: 'Tukang Cat', rating: 4.6, reviews: 98, price: 'Rp 80.000', location: 'Sukolilo, 2.1 km', image: '🎨', verified: true, experience: '6 tahun', jobs: 220 },
+                { id: 5, name: 'Rina Kartika', service: 'Jasa Angkut', rating: 4.8, reviews: 167, price: 'Rp 45.000', location: 'Klampis, 1.0 km', image: '📦', verified: true, experience: '4 tahun', jobs: 190 },
+            ];
+
+            const services = [
+                { id: 1, name: 'Servis AC', icon: '❄️', color: 'bg-blue-100 text-blue-600' },
+                { id: 2, name: 'Tukang Listrik', icon: '⚡', color: 'bg-accent-100 text-accent-600' },
+                { id: 3, name: 'Bersih Rumah', icon: '🧹', color: 'bg-green-100 text-green-600' },
+                { id: 4, name: 'Tukang Cat', icon: '🎨', color: 'bg-purple-100 text-purple-600' },
+                { id: 5, name: 'Jasa Angkut', icon: '📦', color: 'bg-orange-100 text-orange-600' },
+                { id: 6, name: 'Tukang Bangunan', icon: '🔨', color: 'bg-red-100 text-red-600' },
+                { id: 7, name: 'Perbaikan Atap', icon: '🏠', color: 'bg-indigo-100 text-indigo-600' },
+                { id: 8, name: 'Pasang CCTV', icon: '📹', color: 'bg-slate-100 text-slate-600' },
+                { id: 9, name: 'Pipa & Sanitasi', icon: '🚰', color: 'bg-cyan-100 text-cyan-600' },
+                { id: 10, name: 'Tukang Kayu', icon: '🪵', color: 'bg-amber-100 text-amber-600' },
+            ];
+            
+            const orderHistory = [
+                { id: 1, worker: 'Budi Santoso', service: 'Servis AC', date: '15 Nov 2024', status: 'Selesai', rating: 5, price: 'Rp 75.000' },
+                { id: 2, worker: 'Ahmad Yani', service: 'Tukang Listrik', date: '10 Nov 2024', status: 'Selesai', rating: 5, price: 'Rp 60.000' },
+                { id: 3, worker: 'Siti Nurhaliza', service: 'Bersih Rumah', date: '5 Nov 2024', status: 'Selesai', rating: 4, price: 'Rp 50.000' },
+            ];
+
+            const filteredWorkers = workers.filter(worker => 
+                worker.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                worker.service.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+
+            // --- PAGES INSIDE (Kecuali ChatPage) ---
+            
+            const LoginPage = () => (
+                <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+                <div className="bg-white rounded-[2rem] shadow-2xl p-8 w-full max-w-md border border-slate-100">
+                    <div className="text-center mb-10">
+                    <div className="mb-6 flex justify-center">
+                        <img src="./logo.jpg" alt="Logo Anuin" className="w-40 h-auto object-contain drop-shadow-lg hover:scale-105 transition-transform duration-300" onError={(e) => {e.target.style.display='none'; e.target.parentElement.innerHTML='<div class="text-4xl">🛠️</div>'}} />
+                    </div>
+                    <h1 className="text-4xl font-extrabold text-primary-700 mb-2 tracking-tight">ANUIN</h1>
+                    <p className="text-slate-500 font-medium">Jembatan Tepercaya untuk Jasa Anda</p>
+                    </div>
+                    <div className="space-y-5">
+                    <input type="email" placeholder="Email atau Nomor HP" className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-200 focus:outline-none transition-all font-medium text-slate-700" />
+                    <input type="password" placeholder="Password" className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-200 focus:outline-none transition-all font-medium text-slate-700" />
+                    <button onClick={() => { setUserData({ name: 'John Doe', email: 'john@example.com' }); setCurrentPage('home'); }} className="w-full bg-gradient-to-r from-primary-600 to-primary-500 text-white py-4 rounded-xl font-bold text-lg hover:from-primary-700 hover:to-primary-600 transition-all shadow-lg shadow-primary-200 active:scale-[0.98]">Masuk</button>
+                    </div>
+                    <div className="text-center mt-8">
+                    <p className="text-slate-500 font-medium">Belum punya akun?</p>
+                    <button onClick={() => setCurrentPage('register')} className="text-primary-600 font-bold hover:text-primary-800 transition">Daftar Sekarang</button>
+                    </div>
+                </div>
+                </div>
+            );
+
+            const RegisterPage = () => (
+                <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+                <div className="bg-white rounded-[2rem] shadow-2xl p-8 w-full max-w-md border border-slate-100">
+                    <button onClick={() => setCurrentPage('login')} className="mb-6 text-slate-400 hover:text-primary-600 transition"><ChevronLeft size={28} /></button>
+                    <div className="text-center mb-8"><h1 className="text-3xl font-bold text-primary-700 mb-2">Daftar Akun</h1><p className="text-slate-500 font-medium">Bergabung dengan komunitas ANUIN</p></div>
+                    <div className="space-y-4">
+                    <input type="text" placeholder="Nama Lengkap" className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl font-medium" />
+                    <input type="email" placeholder="Email" className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl font-medium" />
+                    <input type="password" placeholder="Password" className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl font-medium" />
+                    <button onClick={() => { setUserData({ name: 'John Doe', email: 'john@example.com' }); setCurrentPage('home'); }} className="w-full bg-gradient-to-r from-primary-600 to-primary-500 text-white py-4 rounded-xl font-bold text-lg hover:from-primary-700 hover:to-primary-600 transition-all shadow-lg shadow-primary-200 active:scale-[0.98] mt-2">Daftar</button>
+                    </div>
+                </div>
+                </div>
+            );
+
+            const HomePage = () => (
+                <div className="min-h-screen bg-slate-50 pb-24 w-full">
+                <div className="bg-gradient-to-br from-primary-600 to-indigo-600 text-white p-6 pb-10 rounded-b-[2.5rem] shadow-soft relative overflow-hidden w-full">
+                    <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+                    <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-primary-400/20 rounded-full blur-2xl"></div>
+                    <div className="flex justify-between items-center mb-8 relative z-10">
+                    <div><h2 className="text-2xl font-bold mb-1">Halo, {userData?.name || 'User'} 👋</h2><p className="text-primary-100 font-medium">Apa yang Anda butuhkan hari ini?</p></div>
+                    <div className="w-12 h-12 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full flex items-center justify-center text-2xl shadow-sm">👤</div>
+                    </div>
+                    <div className="relative z-10">
+                    <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 text-primary-300" size={22} />
+                    <input type="text" placeholder="Cari jasa (cth: Servis AC)..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full pl-14 pr-5 py-4 rounded-2xl bg-white/95 backdrop-blur text-slate-800 font-medium focus:outline-none focus:ring-4 focus:ring-primary-400/30 shadow-lg transition-all placeholder:text-slate-400" />
+                    </div>
+                </div>
+
+                <div className="mt-8 relative rounded-[1.5rem] overflow-hidden shadow-lg shadow-primary-100/50 group transition-all hover:scale-[1.02] active:scale-[0.98] h-40 w-full">
+                    <img src={promoBannerImage} alt="Promo Spesial" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 absolute inset-0" onError={(e) => {e.target.src = 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=800&auto=format&fit=crop'}}/>
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
+                    <div className="absolute bottom-0 left-0 p-5 text-white z-10 w-full h-full flex flex-col justify-center items-start">
+                        <div className="bg-accent-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full inline-flex items-center gap-1 mb-2 shadow-sm animate-pulse"><Percent size={10} fill="currentColor" /> Promo Baru</div>
+                        <h4 className="text-2xl font-extrabold mb-1 leading-tight drop-shadow-sm">Diskon Jasa 30% 🔥</h4>
+                        <p className="text-slate-200 font-medium mb-3 text-xs leading-relaxed max-w-[80%] drop-shadow-sm">Khusus pengguna baru. Hemat sekarang!</p>
+                        <button onClick={() => alert('Halaman detail promo akan segera hadir!')} className="bg-white/20 hover:bg-white/30 backdrop-blur-md text-white text-xs font-bold px-4 py-2 rounded-lg transition border border-white/40 flex items-center gap-1 active:scale-95 shadow-sm">Ambil Promo <ArrowRight size={14} /></button>
+                    </div>
+                    </div>
+
+                <div className="px-6 mt-16 relative z-20 w-full ">
+                    <div className="flex justify-between items-center mb-5">
+                    <h3 className="text-xl font-bold text-slate-800">Layanan Populer</h3>
+                    <button onClick={() => setCurrentPage('search')} className="text-primary-600 text-sm font-bold flex items-center gap-1 hover:text-primary-800 transition">Lihat Semua <ArrowRight size={16} /></button>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4 mb-8 w-full">
+                    {services.slice(0, 10).map(service => (
+                        <button key={service.id} onClick={() => { setSearchQuery(service.name); setCurrentPage('search'); }} className={`${service.color} p-5 rounded-[1.5rem] hover:shadow-md transition-all active:scale-[0.98] flex flex-col items-start border border-transparent hover:border-current bg-opacity-50 hover:bg-opacity-70`}>
+                        <div className="text-4xl mb-3 filter drop-shadow-sm">{service.icon}</div>
+                        <p className="font-bold text-base">{service.name}</p>
+                        </button>
+                    ))}
+                    </div>
+
+                    <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-slate-100 w-full">
+                    <h4 className="font-bold text-lg text-slate-800 mb-5">Mengapa Memilih ANUIN?</h4>
+                    <div className="space-y-4">
+                        <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition"><div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0"><Shield className="text-primary-600" size={24} /></div><div><p className="font-bold text-slate-800 text-base">Terverifikasi & Aman</p><p className="text-sm text-slate-600 leading-relaxed">Semua mitra pekerja telah melalui proses verifikasi ketat.</p></div></div>
+                        <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition"><div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0"><DollarSign className="text-green-600" size={24} /></div><div><p className="font-bold text-slate-800 text-base">Harga Transparan</p><p className="text-sm text-slate-600 leading-relaxed">Biaya jelas di awal. Tidak ada biaya tersembunyi.</p></div></div>
+                        <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition"><div className="w-12 h-12 bg-accent-100 rounded-full flex items-center justify-center flex-shrink-0"><Star className="text-accent-600" size={24} /></div><div><p className="font-bold text-slate-800 text-base">Kualitas Terjamin</p><p className="text-sm text-slate-600 leading-relaxed">Rating dan ulasan asli dari pengguna lain.</p></div></div>
+                    </div>
+                    </div>
+                </div>
+                <BottomNav active="home" />
+                </div>
+            );
+
+            const SearchPage = () => (
+                <div className="min-h-screen bg-slate-50 pb-24 w-full">
+                <StandardHeader title="Hasil Pencarian" showBack={true} onBack={() => setCurrentPage('home')} />
+                <div className="p-6 w-full">
+                    <p className="text-slate-600 font-medium mb-5">Ditemukan {filteredWorkers.length} penyedia jasa</p>
+                    <div className="space-y-5">
+                        {filteredWorkers.map(worker => (
+                            <button key={worker.id} onClick={() => { setSelectedWorker(worker); setCurrentPage('workerDetail'); }} className="w-full bg-white rounded-[1.5rem] p-5 shadow-sm hover:shadow-md transition-all border border-slate-100 active:scale-[0.99]">
+                                <div className="flex gap-5 items-start">
+                                    <div className="w-24 h-24 bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl flex items-center justify-center text-5xl flex-shrink-0 shadow-inner">{worker.image}</div>
+                                    <div className="flex-1 text-left">
+                                        <div className="flex items-center gap-2 mb-1"><h3 className="font-bold text-xl text-slate-800">{worker.name}</h3>{worker.verified && <Shield className="text-primary-500" size={18} fill="currentColor" />}</div>
+                                        <p className="text-primary-600 font-bold text-sm mb-3 bg-primary-50 inline-block px-3 py-1 rounded-full">{worker.service}</p>
+                                        <div className="flex flex-wrap items-center gap-4 text-sm text-slate-600 mb-3">
+                                            <div className="flex items-center gap-1.5 bg-accent-50 px-2 py-1 rounded-lg text-accent-700 font-medium"><Star className="text-accent-500 fill-accent-500" size={16} /><span>{worker.rating}</span></div>
+                                            <div className="flex items-center gap-1.5"><MapPin size={16} className="text-slate-400" /><span className="font-medium">{worker.location}</span></div>
+                                        </div>
+                                        <p className="text-primary-700 font-extrabold text-lg">{worker.price}<span className="text-sm text-slate-500 font-normal">/jam</span></p>
+                                    </div>
+                                </div>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+                <BottomNav active="search" />
+                </div>
+            );
+            
+            const WorkerDetailPage = () => (
+                <div className="min-h-screen bg-slate-50 pb-32 w-full">
+                <div className="bg-gradient-to-br from-primary-600 to-indigo-600 text-white p-6 pt-8 pb-28 rounded-b-[2.5rem] relative overflow-hidden w-full">
+                    <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+                    <button onClick={() => setCurrentPage('search')} className="mb-4 hover:bg-white/20 p-2 rounded-full transition relative z-10"><ChevronLeft size={28} /></button>
+                </div>
+                <div className="px-6 -mt-20 mb-6 relative z-20 w-full">
+                    <div className="bg-white rounded-[2rem] shadow-xl p-6 border border-slate-100">
+                    <div className="flex items-start gap-5 mb-6">
+                        <div className="w-28 h-28 bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl flex items-center justify-center text-6xl flex-shrink-0 shadow-inner border-4 border-white">{selectedWorker?.image}</div>
+                        <div className="flex-1 pt-2">
+                        <div className="flex items-center gap-2 mb-1"><h2 className="text-2xl font-bold text-slate-800">{selectedWorker?.name}</h2><Shield className="text-primary-500" size={22} fill="currentColor" /></div>
+                        <p className="text-primary-600 font-bold mb-3 bg-primary-50 inline-block px-3 py-1 rounded-full text-sm">{selectedWorker?.service}</p>
+                        <div className="flex items-center gap-2"><Star className="text-accent-500 fill-accent-500" size={20} /><span className="font-bold text-slate-800 text-lg">{selectedWorker?.rating}</span><span className="text-slate-500 font-medium">({selectedWorker?.reviews} ulasan)</span></div>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-3 mb-6">
+                        <div className="bg-primary-50 rounded-2xl p-4 text-center border border-primary-100"><Clock className="mx-auto text-primary-600 mb-2" size={28} /><p className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">Pengalaman</p><p className="font-bold text-slate-800 text-lg">{selectedWorker?.experience}</p></div>
+                        <div className="bg-green-50 rounded-2xl p-4 text-center border border-green-100"><CheckCircle className="mx-auto text-green-600 mb-2" size={28} /><p className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">Pekerjaan</p><p className="font-bold text-slate-800 text-lg">{selectedWorker?.jobs}+</p></div>
+                        <div className="bg-accent-50 rounded-2xl p-4 text-center border border-accent-100"><Award className="mx-auto text-accent-600 mb-2" size={28} /><p className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">Rating</p><p className="font-bold text-slate-800 text-lg">{selectedWorker?.rating}/5</p></div>
+                    </div>
+                    <div className="border-t border-slate-100 pt-5">
+                        <div className="flex items-center gap-3 mb-4 bg-slate-50 p-4 rounded-xl"><MapPin className="text-primary-500 flex-shrink-0" size={24} /><p className="text-slate-700 font-medium">{selectedWorker?.location}</p></div>
+                        <div className="flex justify-between items-center bg-primary-50 p-4 rounded-xl border border-primary-100"><span className="text-slate-600 font-medium">Harga per jam</span><div className="flex items-center gap-2"><p className="text-3xl font-extrabold text-primary-700">{selectedWorker?.price}</p></div></div>
+                    </div>
+                    </div>
+                </div>
+                <div className="fixed bottom-0 left-0 right-0 p-6 bg-white/90 backdrop-blur-md border-t border-slate-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-30 max-w-md mx-auto rounded-t-[2rem]">
+                    <div className="flex gap-4">
+                    <button onClick={() => { setCurrentPage('chat'); setChatMessages([{ sender: 'worker', text: 'Halo! Ada yang bisa saya bantu?' }]); }} className="flex-1 bg-primary-50 text-primary-700 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-primary-100 transition active:scale-[0.98]"><MessageCircle size={22} /> Chat</button>
+                    <button onClick={() => setCurrentPage('booking')} className="flex-[2] bg-gradient-to-r from-primary-600 to-primary-500 text-white py-4 rounded-2xl font-bold text-lg hover:from-primary-700 hover:to-primary-600 transition shadow-lg shadow-primary-200 active:scale-[0.98]">Booking Sekarang</button>
+                    </div>
+                </div>
+                </div>
+            );
+
+            const BookingPage = () => {
+                // BookingPage juga sebaiknya dipisah, tapi saya perbaiki cara handle inputnya di sini dengan state lokal
+                const [localData, setLocalData] = useState({ date: '', time: '', address: '', description: '' });
+                return (
+                <div className="min-h-screen bg-slate-50 pb-24 w-full">
+                    <StandardHeader title="Form Booking" showBack={true} onBack={() => setCurrentPage('workerDetail')} />
+                    <div className="p-6 w-full">
+                    <div className="bg-white rounded-[1.5rem] p-5 mb-6 shadow-sm border border-slate-100 flex items-center gap-5"><div className="w-20 h-20 bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl flex items-center justify-center text-4xl shadow-inner flex-shrink-0">{selectedWorker?.image}</div><div><p className="font-bold text-xl text-slate-800 mb-1">{selectedWorker?.name}</p><p className="text-primary-600 font-bold text-sm bg-primary-50 inline-block px-3 py-1 rounded-full mb-2">{selectedWorker?.service}</p><p className="text-primary-700 font-extrabold">{selectedWorker?.price}<span className="text-slate-500 font-normal text-sm">/jam</span></p></div></div>
+                    <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 space-y-6">
+                        <div><label className="block text-slate-700 font-bold mb-3">Pilih Tanggal & Waktu</label><div className="grid grid-cols-2 gap-4"><div className="relative"><Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 text-primary-400" size={22} /><input type="date" value={localData.date} onChange={(e) => setLocalData({...localData, date: e.target.value})} className="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-2xl focus:border-primary-500 focus:ring-2 focus:ring-primary-200 focus:outline-none bg-slate-50 font-medium text-slate-700" /></div><div className="relative"><Clock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-primary-400" size={22} /><input type="time" value={localData.time} onChange={(e) => setLocalData({...localData, time: e.target.value})} className="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-2xl focus:border-primary-500 focus:ring-2 focus:ring-primary-200 focus:outline-none bg-slate-50 font-medium text-slate-700" /></div></div></div>
+                        <div><label className="block text-slate-700 font-bold mb-3">Alamat Lengkap</label><div className="relative"><MapPin className="absolute left-4 top-4 text-primary-400" size={22} /><textarea value={localData.address} onChange={(e) => setLocalData({...localData, address: e.target.value})} placeholder="Masukkan alamat lengkap dan patokan..." className="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-2xl focus:border-primary-500 focus:ring-2 focus:ring-primary-200 focus:outline-none bg-slate-50 font-medium text-slate-700 h-28 resize-none" /></div></div>
+                        <button onClick={() => { setBookingData({...localData, worker: selectedWorker}); setCurrentPage('bookingSuccess'); }} className="w-full bg-gradient-to-r from-primary-600 to-primary-500 text-white py-5 rounded-2xl font-bold text-xl hover:from-primary-700 hover:to-primary-600 transition-all shadow-lg shadow-primary-200 active:scale-[0.98]">Konfirmasi Booking</button>
+                    </div>
+                    </div>
+                </div>
+                );
+            };
+
+            const BookingSuccessPage = () => (<div className="min-h-screen bg-slate-50 flex items-center justify-center p-6"><div className="bg-white rounded-[2rem] shadow-2xl p-8 max-w-md w-full text-center border border-slate-100"><div className="w-28 h-28 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce"><CheckCircle className="text-green-500" size={64} /></div><h2 className="text-3xl font-extrabold text-slate-800 mb-3">Booking Berhasil!</h2><p className="text-slate-600 mb-8 font-medium leading-relaxed">Pesanan Anda telah kami terima.</p><div className="bg-slate-50 rounded-2xl p-5 mb-8 text-left border border-slate-200"><h4 className="font-bold text-slate-800 mb-4">Detail Pesanan</h4><div className="flex items-center gap-4 mb-5 pb-5 border-b border-slate-200"><div className="w-16 h-16 bg-gradient-to-br from-primary-100 to-primary-200 rounded-xl flex items-center justify-center text-3xl shadow-inner">{selectedWorker?.image}</div><div><p className="font-bold text-lg text-slate-800">{selectedWorker?.name}</p></div></div></div><div className="space-y-4"><button onClick={() => setCurrentPage('history')} className="w-full bg-gradient-to-r from-primary-600 to-primary-500 text-white py-4 rounded-xl font-bold text-lg hover:from-primary-700 hover:to-primary-600 transition-all shadow-md active:scale-[0.98]">Lihat Riwayat Pesanan</button><button onClick={() => setCurrentPage('home')} className="w-full bg-slate-100 text-slate-700 py-4 rounded-xl font-bold text-lg hover:bg-slate-200 transition-all border border-slate-200 active:scale-[0.98]">Kembali ke Beranda</button></div></div></div>);
+            
+            const HistoryPage = () => (
+                <div className="min-h-screen bg-slate-50 pb-24 w-full">
+                <StandardHeader title="Riwayat Pesanan" showBack={true} onBack={() => setCurrentPage('home')} />
+                <div className="px-6 py-6 space-y-5 w-full">
+                    {orderHistory.map(order => (
+                    <div key={order.id} className="bg-white rounded-[1.5rem] p-5 shadow-sm border border-slate-100 hover:shadow-md transition w-full">
+                        <div className="flex justify-between items-start mb-4">
+                        <div>
+                            <p className="font-bold text-lg text-slate-800">{order.worker}</p>
+                            <p className="text-primary-600 font-bold text-sm bg-primary-50 inline-block px-3 py-1 rounded-full mt-1">{order.service}</p>
+                        </div>
+                        <span className="bg-green-100 text-green-700 text-xs font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider">{order.status}</span>
+                        </div>
+                        <div className="flex items-center gap-5 text-sm text-slate-600 font-medium mb-4 bg-slate-50 p-3 rounded-xl">
+                        <div className="flex items-center gap-2"><Calendar size={18} className="text-primary-400" /><span>{order.date}</span></div>
+                        <div className="w-px h-4 bg-slate-300"></div>
+                        <div className="flex items-center gap-1 font-bold text-slate-800"><span>{order.price}</span></div>
+                        </div>
+                        {order.rating && (
+                        <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
+                            <span className="text-sm text-slate-500 font-medium">Rating Anda:</span>
+                            <div className="flex gap-1">
+                            {[...Array(5)].map((_, i) => (
+                                <Star key={i} className={i < order.rating ? 'text-accent-500 fill-accent-500' : 'text-slate-200'} size={20} />
+                            ))}
+                            </div>
+                        </div>
+                        )}
+                        <button className="w-full mt-4 bg-primary-50 text-primary-700 py-3 rounded-xl font-bold hover:bg-primary-100 transition active:scale-[0.98] border border-primary-100">Pesan Lagi</button>
+                    </div>
+                    ))}
+                </div>
+                <BottomNav active="history" />
+                </div>
+            );
+
+            const ProfilePage = () => (
+                <div className="min-h-screen bg-slate-50 pb-24 w-full">
+                <div className="bg-gradient-to-br from-primary-600 to-indigo-600 text-white p-6 pt-8 pb-20 rounded-b-[2.5rem] relative overflow-hidden shadow-soft w-full">
+                    <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+                    <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-primary-400/20 rounded-full blur-2xl"></div>
+                    
+                    <h2 className="text-2xl font-bold mb-6 relative z-10">Profil Saya</h2>
+                    <div className="flex items-center gap-5 relative z-10">
+                    <div className="w-20 h-20 bg-white/20 backdrop-blur-sm border-2 border-white/50 rounded-full flex items-center justify-center text-4xl shadow-lg">👤</div>
+                    <div>
+                        <p className="text-2xl font-extrabold mb-1">{userData?.name || 'User'}</p>
+                        <p className="text-primary-100 font-medium bg-primary-700/30 px-3 py-1 rounded-full inline-block text-sm">{userData?.email || 'user@example.com'}</p>
+                    </div>
+                    </div>
+                </div>
+
+                <div className="px-6 -mt-12 space-y-5 relative z-20 w-full">
+                    <div className="bg-white rounded-[1.5rem] shadow-lg overflow-hidden border border-slate-100">
+                    <button className="w-full flex items-center gap-5 p-5 hover:bg-slate-50 transition border-b border-slate-100 active:bg-slate-100">
+                        <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0"><User className="text-primary-600" size={24} /></div>
+                        <div className="flex-1 text-left"><p className="font-bold text-slate-800 text-lg">Edit Profil</p><p className="text-sm text-slate-500 font-medium">Ubah informasi pribadi Anda</p></div>
+                        <ChevronLeft size={20} className="text-slate-300 rotate-180" />
+                    </button>
+                    <button className="w-full flex items-center gap-5 p-5 hover:bg-slate-50 transition border-b border-slate-100 active:bg-slate-100">
+                        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0"><Phone className="text-green-600" size={24} /></div>
+                        <div className="flex-1 text-left"><p className="font-bold text-slate-800 text-lg">Kontak Darurat</p><p className="text-sm text-slate-500 font-medium">Atur nomor penting</p></div>
+                        <ChevronLeft size={20} className="text-slate-300 rotate-180" />
+                    </button>
+                    <button className="w-full flex items-center gap-5 p-5 hover:bg-slate-50 transition active:bg-slate-100">
+                        <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0"><Mail className="text-purple-600" size={24} /></div>
+                        <div className="flex-1 text-left"><p className="font-bold text-slate-800 text-lg">Notifikasi</p><p className="text-sm text-slate-500 font-medium">Atur preferensi notifikasi</p></div>
+                        <ChevronLeft size={20} className="text-slate-300 rotate-180" />
+                    </button>
+                    </div>
+
+                    <div className="bg-white rounded-[1.5rem] shadow-lg overflow-hidden border border-slate-100">
+                    <button className="w-full flex items-center gap-5 p-5 hover:bg-slate-50 transition border-b border-slate-100 active:bg-slate-100">
+                        <div className="w-12 h-12 bg-accent-100 rounded-full flex items-center justify-center flex-shrink-0"><Shield className="text-accent-600" size={24} /></div>
+                        <div className="flex-1 text-left"><p className="font-bold text-slate-800 text-lg">Keamanan</p><p className="text-sm text-slate-500 font-medium">Password & autentikasi</p></div>
+                        <ChevronLeft size={20} className="text-slate-300 rotate-180" />
+                    </button>
+                    <button className="w-full flex items-center gap-5 p-5 hover:bg-slate-50 transition active:bg-slate-100">
+                        <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0"><span className="text-red-600 text-2xl font-bold">?</span></div>
+                        <div className="flex-1 text-left"><p className="font-bold text-slate-800 text-lg">Bantuan & FAQ</p><p className="text-sm text-slate-500 font-medium">Pusat bantuan</p></div>
+                        <ChevronLeft size={20} className="text-slate-300 rotate-180" />
+                    </button>
+                    </div>
+
+                    <button onClick={() => { setUserData(null); setCurrentPage('login'); }} className="w-full bg-red-50 text-red-600 py-5 rounded-[1.5rem] font-bold text-lg hover:bg-red-100 transition border border-red-100 shadow-sm active:scale-[0.98] mt-4">Keluar Akun</button>
+                </div>
+                <BottomNav active="profile" />
+                </div>
+            );
+
+            const BottomNav = ({ active }) => (
+                <div className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-slate-200 shadow-[0_-4px_10px_-2px_rgba(0,0,0,0.05)] z-50 max-w-md mx-auto rounded-t-[2rem] pb-safe">
+                <div className="flex justify-around items-center py-4 px-2">
+                    {['home', 'search', 'history', 'profile'].map(item => (
+                    <button key={item} onClick={() => setCurrentPage(item)} className={`flex flex-col items-center gap-1.5 px-4 py-2 rounded-2xl transition-all duration-300 group ${active === item ? 'text-primary-600 bg-primary-50' : 'text-slate-400 hover:text-primary-500 hover:bg-slate-50'}`}>
+                        {item === 'home' && <Home size={26} className={`transition-transform duration-300 ${active === 'home' ? 'scale-110' : 'group-hover:scale-105'}`} />}
+                        {item === 'search' && <Search size={26} className={`transition-transform duration-300 ${active === 'search' ? 'scale-110' : 'group-hover:scale-105'}`} />}
+                        {item === 'history' && <History size={26} className={`transition-transform duration-300 ${active === 'history' ? 'scale-110' : 'group-hover:scale-105'}`} />}
+                        {item === 'profile' && <User size={26} className={`transition-transform duration-300 ${active === 'profile' ? 'scale-110' : 'group-hover:scale-105'}`} />}
+                        <span className="text-xs font-bold capitalize">{item === 'history' ? 'Riwayat' : item === 'home' ? 'Beranda' : item === 'search' ? 'Cari' : 'Profil'}</span>
+                    </button>
+                    ))}
+                </div>
+                </div>
+            );
+
+            return (
+                <div className="w-full max-w-md bg-slate-50 shadow-2xl min-h-screen relative overflow-hidden mx-auto">
+                    {currentPage === 'login' && <LoginPage />}
+                    {currentPage === 'register' && <RegisterPage />}
+                    {currentPage === 'home' && <HomePage />}
+                    {currentPage === 'search' && <SearchPage />}
+                    {currentPage === 'workerDetail' && <WorkerDetailPage />}
+                    {currentPage === 'booking' && <BookingPage />}
+                    {currentPage === 'bookingSuccess' && <BookingSuccessPage />}
+                    {currentPage === 'chat' && (
+                        // --- 2. RENDER CHAT PAGE DENGAN PROPS ---
+                        <ChatPage 
+                            worker={selectedWorker}
+                            messages={chatMessages}
+                            setMessages={setChatMessages}
+                            input={messageInput}
+                            setInput={setMessageInput}
+                            onBack={() => setCurrentPage('workerDetail')}
+                        />
+                    )}
+                    {currentPage === 'history' && <HistoryPage />}
+                    {currentPage === 'profile' && <ProfilePage />}
+                </div>
+            );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<AnuinApp />);
+
+    </script>
+</body>
+</html>

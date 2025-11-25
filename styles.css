@@ -1,0 +1,14 @@
+/* Sembunyikan scrollbar agar rapi */
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+/* Class wajib untuk navigasi */
+.hidden {
+    display: none !important;
+}
+
+body {
+    -webkit-tap-highlight-color: transparent;
+}
