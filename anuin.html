@@ -275,6 +275,75 @@
                     </div>
             </div>
         </div>
+        <div id="page-profile-mitra" class="page-section hidden fade-in bg-slate-50 min-h-screen pb-24">
+            <div class="bg-gradient-to-br from-primary-600 to-indigo-600 text-white p-6 pt-8 pb-20 rounded-b-[2.5rem] shadow-soft relative overflow-hidden">
+                <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+                
+                <h2 class="text-2xl font-bold mb-6 relative z-10">Profil Mitra</h2>
+                
+                <div class="flex items-center gap-5 relative z-10">
+                    <div class="w-20 h-20 bg-white border-2 border-white/50 rounded-full flex items-center justify-center text-4xl shadow-lg relative">
+                        👨‍🔧
+                        <div class="absolute bottom-0 right-0 w-6 h-6 bg-green-500 border-2 border-white rounded-full" title="Online"></div>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-extrabold mb-1">Budi Santoso</p>
+                        <p class="text-primary-100 font-medium bg-primary-700/30 px-3 py-1 rounded-full inline-block text-sm">Mitra Spesialis AC</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 -mt-12 space-y-4 relative z-20">
+                <div class="bg-white rounded-[1.5rem] shadow-lg p-6 border border-slate-100 space-y-4">
+                    <h3 class="font-bold text-slate-800 border-b border-slate-100 pb-2">Data Akun</h3>
+                    
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-slate-400"><i data-lucide="phone" class="w-5 h-5"></i></div>
+                        <div>
+                            <p class="text-xs text-slate-400 font-bold uppercase">Nomor HP / WhatsApp</p>
+                            <p class="font-bold text-slate-700">0812-3456-7890</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-slate-400"><i data-lucide="mail" class="w-5 h-5"></i></div>
+                        <div>
+                            <p class="text-xs text-slate-400 font-bold uppercase">Email</p>
+                            <p class="font-bold text-slate-700">budi.santoso@gmail.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-slate-400"><i data-lucide="map-pin" class="w-5 h-5"></i></div>
+                        <div>
+                            <p class="text-xs text-slate-400 font-bold uppercase">Alamat Domisili</p>
+                            <p class="font-bold text-slate-700">Keputih, Surabaya</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-[1.5rem] shadow-lg overflow-hidden border border-slate-100">
+                    <button onclick="alert('Fitur Edit Profil')" class="w-full flex items-center gap-4 p-5 hover:bg-slate-50 transition border-b border-slate-100">
+                        <div class="w-10 h-10 bg-primary-50 rounded-full flex items-center justify-center shrink-0"><i data-lucide="user-cog" class="text-primary-600 w-5"></i></div>
+                        <div class="flex-1 text-left"><p class="font-bold text-slate-800">Edit Data Diri</p></div>
+                        <i data-lucide="chevron-right" class="text-slate-300 w-5"></i>
+                    </button>
+                    
+                    <button onclick="alert('Fitur Dokumen Saya')" class="w-full flex items-center gap-4 p-5 hover:bg-slate-50 transition border-b border-slate-100">
+                        <div class="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center shrink-0"><i data-lucide="file-text" class="text-orange-600 w-5"></i></div>
+                        <div class="flex-1 text-left"><p class="font-bold text-slate-800">Dokumen Saya</p><p class="text-xs text-slate-500">KTP & Sertifikat</p></div>
+                        <i data-lucide="chevron-right" class="text-slate-300 w-5"></i>
+                    </button>
+
+                    <button onclick="logoutMitra()" class="w-full flex items-center gap-4 p-5 hover:bg-red-50 transition group">
+                        <div class="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center shrink-0 group-hover:bg-red-100"><i data-lucide="log-out" class="text-red-600 w-5"></i></div>
+                        <div class="flex-1 text-left"><p class="font-bold text-red-600">Keluar Aplikasi</p></div>
+                    </button>
+                </div>
+                
+                <p class="text-center text-xs text-slate-400 py-4">Versi Aplikasi 1.0.0 (Mitra)</p>
+            </div>
+        </div>
         <div id="page-add-service" class="page-section hidden fade-in bg-slate-50 min-h-screen pb-24">
             <div class="bg-white p-6 border-b border-slate-100 sticky top-0 z-20">
                 <h1 class="text-xl font-extrabold text-slate-800">Pilih Kategori Jasa</h1>
@@ -684,25 +753,26 @@
                         <p class="text-primary-600 font-bold text-sm bg-primary-50 inline-block px-2 py-0.5 rounded-full" id="booking-worker-service">Jasa</p>
                     </div>
                 </div>
+
                 <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 space-y-6">
                     <div>
-                        <label class="block text-slate-700 font-bold mb-3">Pilih Tanggal & Waktu</label>
+                        <label class="block text-slate-700 font-bold mb-3">Pilih Tanggal & Waktu <span class="text-red-500">*</span></label>
                         <div class="grid grid-cols-2 gap-4">
                             <div class="relative">
                                 <i data-lucide="calendar" class="absolute left-4 top-1/2 -translate-y-1/2 text-primary-400 w-5"></i>
-                                <input type="date" class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-2xl focus:border-primary-500 focus:outline-none bg-slate-50 font-medium text-slate-700 text-sm">
+                                <input id="booking-date" type="date" class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-2xl focus:border-primary-500 focus:outline-none bg-slate-50 font-medium text-slate-700 text-sm">
                             </div>
                             <div class="relative">
                                 <i data-lucide="clock" class="absolute left-4 top-1/2 -translate-y-1/2 text-primary-400 w-5"></i>
-                                <input type="time" class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-2xl focus:border-primary-500 focus:outline-none bg-slate-50 font-medium text-slate-700 text-sm">
+                                <input id="booking-time" type="time" class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-2xl focus:border-primary-500 focus:outline-none bg-slate-50 font-medium text-slate-700 text-sm">
                             </div>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-slate-700 font-bold mb-3">Alamat Lengkap</label>
+                        <label class="block text-slate-700 font-bold mb-3">Alamat Lengkap <span class="text-red-500">*</span></label>
                         <div class="relative">
                             <i data-lucide="map-pin" class="absolute left-4 top-4 text-primary-400 w-5"></i>
-                            <textarea placeholder="Masukkan alamat lengkap dan patokan..." class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-2xl focus:border-primary-500 focus:outline-none bg-slate-50 font-medium text-slate-700 h-28 resize-none"></textarea>
+                            <textarea id="booking-address" placeholder="Masukkan alamat lengkap dan patokan..." class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-2xl focus:border-primary-500 focus:outline-none bg-slate-50 font-medium text-slate-700 h-28 resize-none"></textarea>
                         </div>
                     </div>
                     <button onclick="submitBooking()" class="w-full bg-gradient-to-r from-primary-600 to-primary-500 text-white py-5 rounded-2xl font-bold text-xl hover:from-primary-700 hover:to-primary-600 shadow-lg active:scale-[0.98]">Konfirmasi Booking</button>
@@ -922,21 +992,25 @@
             </div>
         </div>
         <div id="bottom-nav-mitra" class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur border-t max-w-md mx-auto rounded-t-[2rem] hidden z-40 pb-2 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
-            <div class="flex justify-around items-center py-4">
+            <div class="flex justify-between items-center py-3 px-6">
                 <button onclick="navigateTo('page-home-mitra')" id="nav-mitra-home" class="nav-btn-mitra flex flex-col items-center gap-1 text-primary-600 transition-colors">
-                    <i data-lucide="layout-grid" class="w-6 h-6"></i><span class="text-[10px] font-bold uppercase">Beranda</span>
+                    <i data-lucide="layout-grid" class="w-6 h-6"></i><span class="text-[9px] font-bold uppercase">Beranda</span>
                 </button>
                 
                 <button onclick="navigateTo('page-orders-mitra')" id="nav-mitra-orders" class="nav-btn-mitra flex flex-col items-center gap-1 text-slate-400 hover:text-primary-600 transition-colors">
-                    <i data-lucide="clipboard-list" class="w-6 h-6"></i><span class="text-[10px] font-bold uppercase">Pesanan</span>
+                    <i data-lucide="clipboard-list" class="w-6 h-6"></i><span class="text-[9px] font-bold uppercase">Pesanan</span>
                 </button>
 
                 <button onclick="navigateTo('page-shop-mitra')" id="nav-mitra-shop" class="nav-btn-mitra flex flex-col items-center gap-1 text-slate-400 hover:text-primary-600 transition-colors">
-                    <i data-lucide="store" class="w-6 h-6"></i><span class="text-[10px] font-bold uppercase">Lapak</span>
+                    <i data-lucide="store" class="w-6 h-6"></i><span class="text-[9px] font-bold uppercase">Lapak</span>
                 </button>
                 
                 <button onclick="navigateTo('page-wallet-mitra')" id="nav-mitra-wallet" class="nav-btn-mitra flex flex-col items-center gap-1 text-slate-400 hover:text-primary-600 transition-colors">
-                    <i data-lucide="wallet" class="w-6 h-6"></i><span class="text-[10px] font-bold uppercase">Dompet</span>
+                    <i data-lucide="wallet" class="w-6 h-6"></i><span class="text-[9px] font-bold uppercase">Dompet</span>
+                </button>
+
+                <button onclick="navigateTo('page-profile-mitra')" id="nav-mitra-profile" class="nav-btn-mitra flex flex-col items-center gap-1 text-slate-400 hover:text-primary-600 transition-colors">
+                    <i data-lucide="user" class="w-6 h-6"></i><span class="text-[9px] font-bold uppercase">Profil</span>
                 </button>
             </div>
         </div>
@@ -1025,6 +1099,8 @@
         let selectedServiceIds = [];
 
         // --- 2. SISTEM NAVIGASI PUSAT (FIX UTAMA) ---
+        // --- 2. SISTEM NAVIGASI PUSAT (FIXED) ---
+        // --- 2. SISTEM NAVIGASI PUSAT (UPDATED) ---
         function navigateTo(pageId) {
             // Sembunyikan semua page
             document.querySelectorAll('.page-section').forEach(page => page.classList.add('hidden'));
@@ -1039,33 +1115,34 @@
             const navCustomer = document.getElementById('bottom-nav');
             const navMitra = document.getElementById('bottom-nav-mitra');
 
-            // List Page Customer
-            const customerPages = ['page-home', 'page-chat-list', 'page-search', 'page-history', 'page-profile', 'page-detail', 'page-booking', 'page-booking-success', 'page-service-info', 'page-edit-profile', 'page-generic-info', 'page-worker-list', 'page-history-detail'];
+            // Halaman Customer yang menampilkan Navbar
+            const customerPagesWithNav = ['page-home', 'page-chat-list', 'page-search', 'page-history', 'page-profile'];
             
-            // List Page Mitra (SUDAH DITAMBAH DOMPET)
-            const mitraPages = ['page-home-mitra', 'page-wallet-mitra', 'page-orders-mitra', 'page-shop-mitra'];
+            // Halaman Mitra yang menampilkan Navbar (TAMBAHKAN page-profile-mitra)
+            const mitraPages = ['page-home-mitra', 'page-wallet-mitra', 'page-orders-mitra', 'page-shop-mitra', 'page-profile-mitra'];
 
             // Reset Navbar
             navCustomer.classList.add('hidden');
             navMitra.classList.add('hidden');
 
-            if (customerPages.includes(pageId)) {
+            if (customerPagesWithNav.includes(pageId)) {
                 navCustomer.classList.remove('hidden');
                 updateActiveNav(pageId);
                 
+                // Refresh Content Customer
                 if(pageId === 'page-history') renderHistory();
                 if(pageId === 'page-chat-list') renderChatList();
                 if(pageId === 'page-search') renderCustomServices(); 
             } 
             else if (mitraPages.includes(pageId)) {
                 navMitra.classList.remove('hidden');
-                updateActiveNavMitra(pageId); // Highlight nav mitra
+                updateActiveNavMitra(pageId);
+                
+                // Refresh Content Mitra
+                if(pageId === 'page-shop-mitra') renderMyShop();
             }
 
             if(typeof lucide !== 'undefined') lucide.createIcons();
-            if (pageId === 'page-shop-mitra') {
-                renderMyShop(); // Render ulang saat membuka lapak saya
-            }
         }
 
         // --- 3. HELPER FUNCTIONS ---
@@ -1089,12 +1166,13 @@
                 btn.classList.add('text-slate-400');
             });
 
-            // Mapping Baru
+            // Mapping Baru (5 Item)
             const map = { 
                 'page-home-mitra': 'nav-mitra-home',
+                'page-orders-mitra': 'nav-mitra-orders',
+                'page-shop-mitra': 'nav-mitra-shop',
                 'page-wallet-mitra': 'nav-mitra-wallet',
-                'page-orders-mitra': 'nav-mitra-orders', // Mapping Pesanan
-                'page-shop-mitra': 'nav-mitra-shop'      // Mapping Lapak
+                'page-profile-mitra': 'nav-mitra-profile' // Mapping Profil Baru
             };
             
             const activeId = map[pageId];
@@ -1254,12 +1332,44 @@
             navigateTo('page-detail');
         }
 
+        // FUNGSI BOOKING DENGAN VALIDASI
         function submitBooking() {
-            const date = new Date();
-            const formattedDate = date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear();
-            const newOrder = { id: Date.now(), worker: selectedWorker.name, service: selectedWorker.service, date: formattedDate, status: 'Menunggu', rating: 0, price: selectedWorker.price.replace('/jam', '') };
+            // 1. Ambil nilai dari input
+            const dateVal = document.getElementById('booking-date').value;
+            const timeVal = document.getElementById('booking-time').value;
+            const addressVal = document.getElementById('booking-address').value;
+
+            // 2. Cek Validasi (Wajib Isi)
+            if (!dateVal || !timeVal || !addressVal.trim()) {
+                alert("⚠️ Harap lengkapi Tanggal, Waktu, dan Alamat sebelum melanjutkan!");
+                return; // Stop proses jika ada yang kosong
+            }
+
+            // 3. Format Tanggal agar cantik (Contoh: 12 Des 2025 • 14:00)
+            const dateObj = new Date(dateVal);
+            const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agust", "Sep", "Okt", "Nov", "Des"];
+            const formattedDate = `${dateObj.getDate()} ${months[dateObj.getMonth()]} ${dateObj.getFullYear()} • ${timeVal}`;
+
+            // 4. Buat Data Order Baru
+            const newOrder = { 
+                id: Date.now(), 
+                worker: selectedWorker.name, 
+                service: selectedWorker.service, 
+                date: formattedDate, // Pakai tanggal yang diinput user
+                status: 'Menunggu', 
+                rating: 0, 
+                price: selectedWorker.price.replace('/jam', ''),
+                location: addressVal // Simpan alamat juga (opsional untuk ditampilkan)
+            };
+
+            // 5. Simpan & Pindah Halaman
             historyData.unshift(newOrder);
             navigateTo('page-booking-success');
+            
+            // Reset Form (Opsional, agar bersih saat kembali)
+            document.getElementById('booking-date').value = '';
+            document.getElementById('booking-time').value = '';
+            document.getElementById('booking-address').value = '';
         }
 
         function renderHistory() {
