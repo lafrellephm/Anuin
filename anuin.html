@@ -37,12 +37,355 @@
 
     <div class="w-full max-w-md bg-slate-50 shadow-2xl min-h-screen relative overflow-hidden mx-auto border-x border-slate-200">
 
-        <div id="page-login" class="page-section fade-in">
+        <div id="page-loading" class="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center p-6 transition-opacity duration-500">
+            <div class="text-center w-full max-w-xs">
+                <img src="Group 1.png" alt="Anuin Logo" class="h-24 mx-auto mb-8 object-contain">
+                
+                <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden relative">
+                    <div id="loading-bar" class="bg-gradient-to-r from-primary-600 to-primary-400 h-full rounded-full w-0 transition-all ease-out duration-[1000ms]"></div>
+                </div>
+                
+                <p class="text-slate-400 text-xs font-medium mt-3 animate-pulse">Memuat aplikasi...</p>
+            </div>
+        </div>
+        <div id="page-role-selection" class="page-section hidden fade-in">
+            <div class="min-h-screen flex flex-col items-center justify-center p-8 bg-white relative">
+                
+                <div class="text-center mb-16">
+                    <img src="Group 1.png" alt="Anuin Logo" class="h-24 mx-auto mb-8 object-contain">      
+                    
+                    <h4 class="text-4xl font-black text-slate-800 tracking-tight mb-4">Ayo bergabung bersama!</h4>
+                    <p class="text-slate-500 text-sm font-medium leading-relaxed max-w-[260px] mx-auto">
+                        Satu aplikasi untuk segala kebutuhan jasa harian Anda.
+                    </p>
+                </div>
+
+                <div class="w-full space-y-5 max-w-xs">
+                    <button onclick="selectRole('customer')" class="w-full bg-primary-600 text-white py-4 rounded-2xl font-bold text-lg shadow-xl shadow-primary-600/30 hover:bg-primary-700 active:scale-[0.98] transition-all">
+                        Saya Pencari Jasa (Customer)
+                    </button>
+                    
+                    <div class="relative flex py-2 items-center">
+                        <div class="flex-grow border-t border-slate-200"></div>
+                        <span class="flex-shrink-0 mx-4 text-slate-300 text-xs font-bold uppercase tracking-wider">atau</span>
+                        <div class="flex-grow border-t border-slate-200"></div>
+                    </div>
+
+                    <button onclick="selectRole('mitra')" class="w-full bg-white border-2 border-primary-600 text-primary-600 py-4 rounded-2xl font-bold text-lg hover:bg-primary-50 active:scale-[0.98] transition-all shadow-sm">
+                        Gabung Jadi Mitra (Kuli)
+                    </button>
+                </div>
+
+                <p class="absolute bottom-10 text-[10px] text-slate-300 font-medium">Versi 1.0.0 © 2024 Anuin Corp</p>
+            </div>
+        </div>
+
+        <div id="page-login-mitra" class="page-section hidden fade-in">
+            
+            <div class="min-h-screen bg-white p-6 flex flex-col">
+                
+                <div class="mt-4 mb-10">
+                    <button onclick="navigateTo('page-role-selection')" class="hover:bg-slate-50 p-2 rounded-full -ml-2 transition-colors">
+                        <i data-lucide="arrow-left" class="w-6 h-6 text-slate-500"></i>
+                    </button>
+                </div>
+
+                <div class="mb-10 text-center mt-4">
+                    <h1 class="text-3xl font-extrabold text-primary-700 mb-3">Area Mitra</h1>
+                    <p class="text-slate-500 font-medium text-sm">Kelola jasa dan pendapatanmu.</p>
+                </div>
+
+                <div class="space-y-5 w-full max-w-sm mx-auto">
+                    <input type="text" placeholder="Nomor HP / Email" class="w-full px-5 py-4 bg-primary-50 border border-primary-100 rounded-xl focus:border-primary-500 focus:bg-white focus:outline-none transition-all font-medium text-slate-700 placeholder:text-slate-400">
+                    
+                    <input type="password" placeholder="Password" class="w-full px-5 py-4 bg-primary-50 border border-primary-100 rounded-xl focus:border-primary-500 focus:bg-white focus:outline-none transition-all font-medium text-slate-700 placeholder:text-slate-400">
+                    
+                    <button onclick="loginMitra()" class="w-full bg-primary-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-primary-700 shadow-lg shadow-primary-600/30 active:scale-[0.98] transition-all mt-4">
+                        Masuk Mitra
+                    </button>
+                </div>
+
+                <div class="text-center mt-8">
+                    <p class="text-slate-500 font-medium text-sm">Belum jadi mitra? 
+                        <button onclick="navigateTo('page-register-mitra-step1')" class="text-primary-600 font-bold hover:underline transition">Daftar Sekarang</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div id="page-home-mitra" class="page-section hidden fade-in bg-slate-50 min-h-screen pb-24">
+            <div class="bg-primary-600 p-6 pt-12 pb-16 rounded-b-[2.5rem] shadow-lg relative">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="text-white">
+                        <p class="text-primary-200 text-sm font-medium mb-1">Selamat Bekerja,</p>
+                        <h2 class="text-2xl font-bold">Budi Santoso</h2>
+                    </div>
+                    <div class="flex flex-col items-end">
+                        <div class="bg-primary-800 rounded-full p-1 flex items-center cursor-pointer w-24 relative" onclick="toggleOnlineStatus(this)">
+                            <span id="mitra-status-text" class="text-[10px] font-bold text-white absolute left-3 transition-all">ONLINE</span>
+                            <div id="mitra-status-knob" class="w-6 h-6 bg-white rounded-full shadow-md transform translate-x-16 transition-transform duration-300"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mx-6 -mt-10 bg-white rounded-2xl shadow-xl p-6 border border-slate-100 relative z-10">
+                <p class="text-slate-500 text-xs font-bold mb-1">Pendapatan Hari Ini</p>
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-3xl font-extrabold text-slate-800">Rp 0</h3>
+                    <span class="bg-slate-100 text-slate-400 text-[10px] px-2 py-1 rounded-lg font-bold">Belum ada order</span>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-2 border-t border-slate-100 pt-4">
+                    <div class="text-center">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Rating</p>
+                        <div class="flex items-center justify-center gap-1">
+                            <span class="font-bold text-slate-800">5.0</span>
+                            <i data-lucide="star" class="w-3 h-3 text-yellow-500 fill-yellow-500"></i>
+                        </div>
+                    </div>
+                    <div class="text-center border-l border-slate-100">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Selesai</p>
+                        <span class="font-bold text-slate-800">0 Job</span>
+                    </div>
+                    <div class="text-center border-l border-slate-100">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Ditolak</p>
+                        <span class="font-bold text-red-500">0 Job</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 mt-8">
+                <h3 class="text-lg font-bold text-slate-800 mb-4">Menu Cepat</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="navigateTo('page-shop-mitra')" class="bg-green-50 p-4 rounded-2xl ...">
+                        <div>
+                            <p class="font-bold text-slate-800 text-sm">Kelola Jasa</p>
+                            </div>
+                    </button>
+
+                    <button onclick="navigateTo('page-wallet-mitra')" class="bg-blue-50 p-4 rounded-2xl border border-blue-100 flex items-center gap-4 hover:shadow-md transition active:scale-[0.98] text-left">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-sm shrink-0">
+                            <i data-lucide="wallet" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-800 text-sm">Tarik Dana</p>
+                            <p class="text-[10px] text-slate-500">Dompet</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div> 
+        <div id="page-wallet-mitra" class="page-section hidden fade-in bg-slate-50 min-h-screen pb-24">
+            <div class="bg-primary-900 text-white p-6 pt-12 pb-20 rounded-b-[2.5rem] shadow-lg text-center relative z-10">
+                <h2 class="text-lg font-bold mb-2 opacity-90">Dompet Mitra</h2>
+                <h1 class="text-5xl font-black tracking-tight mb-8">Rp 0</h1>
+                
+                <button onclick="alert('Fitur Tarik Dana akan segera hadir!')" class="w-full bg-green-500 text-white py-4 rounded-xl font-bold text-lg hover:bg-green-600 shadow-lg shadow-primary-600/40 active:scale-[0.98] transition-all">
+                    Tarik Dana (Withdraw)
+                </button>
+            </div>
+
+            <div class="px-6 -mt-6 relative z-20 space-y-4">
+                <button onclick="alert('Halaman Edit Profil Mitra')" class="w-full bg-white p-5 rounded-2xl shadow-md border border-slate-100 flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.98]">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-primary-50 rounded-full flex items-center justify-center text-primary-600">
+                            <i data-lucide="user-cog" class="w-5 h-5"></i>
+                        </div>
+                        <span class="font-bold text-slate-800 text-base">Edit Profil Mitra</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="text-slate-300 w-5 h-5"></i>
+                </button>
+
+                <button onclick="logoutMitra()" class="w-full bg-white p-5 rounded-2xl shadow-md border border-slate-100 flex items-center justify-between hover:bg-red-50 transition active:scale-[0.98] group">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center text-red-500 group-hover:bg-red-100 transition">
+                            <i data-lucide="log-out" class="w-5 h-5"></i>
+                        </div>
+                        <span class="font-bold text-red-500 text-base">Keluar Aplikasi</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="text-red-200 w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+        <div id="page-orders-mitra" class="page-section hidden fade-in bg-slate-50 min-h-screen pb-24">
+            <div class="bg-white p-6 pb-4 sticky top-0 z-20 shadow-sm">
+                <h1 class="text-2xl font-extrabold text-slate-800 mb-6">Pesanan Masuk</h1>
+                
+                <div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+                    <button class="px-5 py-2 bg-primary-600 text-white rounded-full text-sm font-bold shadow-md shadow-primary-600/30 whitespace-nowrap">
+                        Masuk (1)
+                    </button>
+                    <button class="px-5 py-2 bg-slate-100 text-slate-500 rounded-full text-sm font-bold hover:bg-slate-200 transition whitespace-nowrap">
+                        Berjalan
+                    </button>
+                    <button class="px-5 py-2 bg-slate-100 text-slate-500 rounded-full text-sm font-bold hover:bg-slate-200 transition whitespace-nowrap">
+                        Selesai
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <div id="order-card-1" class="bg-white p-5 rounded-[1.5rem] shadow-md border border-slate-100 relative overflow-hidden">
+                    <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-green-500"></div>
+                    
+                    <div class="flex justify-between items-start mb-3 pl-3">
+                        <span class="bg-green-100 text-green-700 text-[10px] font-extrabold px-2 py-1 rounded-md uppercase">Baru Saja</span>
+                        <span class="text-xs text-slate-400 font-medium">2 mnt lalu</span>
+                    </div>
+
+                    <div class="pl-3 mb-4">
+                        <h3 class="font-bold text-lg text-slate-800 mb-1">Servis AC (Cuci Rutin)</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">Jl. Teknik Kimia, Keputih (Kost Putri)</p>
+                    </div>
+
+                    <div class="pl-3 flex items-center gap-3 mb-6">
+                        <div class="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center text-sm border border-white shadow-sm">👤</div>
+                        <p class="font-bold text-slate-700 text-sm">Bina Ilyas</p>
+                    </div>
+
+                    <div class="pl-3 flex gap-3">
+                        <button onclick="rejectOrder('order-card-1')" class="flex-1 bg-slate-100 text-slate-600 py-3 rounded-xl font-bold text-sm hover:bg-slate-200 transition">
+                            Tolak
+                        </button>
+                        <button onclick="acceptOrder('order-card-1')" class="flex-1 bg-primary-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-primary-700 shadow-lg shadow-primary-600/20 transition active:scale-[0.98]">
+                            Terima Job
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-shop-mitra" class="page-section hidden fade-in bg-slate-50 min-h-screen pb-24">
+            <div class="bg-white p-6 sticky top-0 z-20 border-b border-slate-100 flex justify-between items-center">
+                <h1 class="text-2xl font-extrabold text-slate-800">Lapak Saya</h1>
+                <button onclick="openAddServicePage()" class="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-primary-600/30 hover:bg-primary-700 active:scale-90 transition">
+                    <i data-lucide="plus" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <div class="p-6">
+                <div class="bg-blue-50 border border-blue-100 p-4 rounded-2xl flex gap-3 mb-6">
+                    <i data-lucide="info" class="w-5 h-5 text-blue-600 shrink-0 mt-0.5"></i>
+                    <p class="text-xs text-blue-800 leading-relaxed font-medium">
+                        Jasa yang Anda buat di sini akan muncul di menu "Cari" pada aplikasi pelanggan.
+                    </p>
+                </div>
+
+                <div class="space-y-4" id="shop-service-container">
+                    </div>
+            </div>
+        </div>
+        <div id="page-add-service" class="page-section hidden fade-in bg-slate-50 min-h-screen pb-24">
+            <div class="bg-white p-6 border-b border-slate-100 sticky top-0 z-20">
+                <h1 class="text-xl font-extrabold text-slate-800">Pilih Kategori Jasa</h1>
+                <p class="text-xs text-slate-500 mt-1">Pilih satu atau lebih jasa yang Anda kuasai.</p>
+            </div>
+
+            <div class="p-6 space-y-3" id="add-service-container">
+                </div>
+
+            <div class="fixed bottom-0 left-0 right-0 p-6 bg-white border-t border-slate-100 max-w-md mx-auto z-30 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
+                <div class="flex gap-4">
+                    <button onclick="navigateTo('page-shop-mitra')" class="flex-1 bg-red-50 text-red-600 py-4 rounded-xl font-bold text-lg border border-red-100 hover:bg-red-100 active:scale-[0.98] transition">
+                        Batal
+                    </button>
+                    
+                    <button id="btn-confirm-add-service" onclick="saveNewServices()" disabled class="flex-[2] bg-slate-200 text-slate-400 py-4 rounded-xl font-bold text-lg shadow-none cursor-not-allowed transition-all">
+                        Tambahkan
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-register-mitra-step1" class="page-section hidden fade-in">
+            <div class="min-h-screen bg-white p-6 pb-24">
+                <div class="mt-4 mb-8">
+                    <button onclick="navigateTo('page-login-mitra')" class="hover:bg-slate-50 p-2 rounded-full -ml-2 transition-colors mb-4">
+                        <i data-lucide="arrow-left" class="w-6 h-6 text-slate-800"></i>
+                    </button>
+                    <h1 class="text-2xl font-extrabold text-primary-700 mb-2">Daftar Mitra Baru</h1>
+                    <p class="text-slate-500 text-sm">Lengkapi data diri Anda untuk mulai berjualan jasa.</p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <label class="font-bold text-slate-700 text-sm">Nama Lengkap</label>
+                        <input type="text" placeholder="Masukkan nama" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:border-primary-500 focus:outline-none transition-all font-medium text-slate-700">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="font-bold text-slate-700 text-sm">Nomor HP </label>
+                        <input type="tel" placeholder="08..." class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:border-primary-500 focus:outline-none transition-all font-medium text-slate-700">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="font-bold text-slate-700 text-sm">Kategori Jasa Utama</label>
+                        <div class="relative">
+                            <select class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:border-primary-500 focus:outline-none transition-all font-medium text-slate-700 appearance-none">
+                                <option>Tukang Bangunan</option>
+                                <option>Servis AC</option>
+                                <option>Kelistrikan</option>
+                                <option>Kebersihan</option>
+                                <option>Lainnya</option>
+                            </select>
+                            <i data-lucide="chevron-down" class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5 pointer-events-none"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fixed bottom-0 left-0 right-0 p-6 bg-white border-t border-slate-100 max-w-md mx-auto">
+                    <button onclick="navigateTo('page-register-mitra-step2')" class="w-full bg-primary-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-primary-700 active:scale-[0.98] transition-all shadow-lg shadow-primary-600/20">
+                        Lanjut: Verifikasi KTP
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-register-mitra-step2" class="page-section hidden fade-in">
+            <div class="min-h-screen bg-white p-6 pb-24 flex flex-col">
+                <div class="mt-4 mb-8">
+                    <button onclick="navigateTo('page-register-mitra-step1')" class="hover:bg-slate-50 p-2 rounded-full -ml-2 transition-colors mb-4">
+                        <i data-lucide="arrow-left" class="w-6 h-6 text-slate-800"></i>
+                    </button>
+                    <h1 class="text-2xl font-extrabold text-primary-700 mb-2">Verifikasi Identitas</h1>
+                    <p class="text-slate-500 text-sm">Wajib upload foto KTP asli agar akun terverifikasi.</p>
+                </div>
+
+                <div class="flex-1 flex flex-col justify-center mb-10">
+                    <div id="ktp-upload-area" onclick="handleKTPUpload()" class="w-full h-64 border-2 border-dashed border-primary-200 bg-primary-50/50 rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-primary-50 transition-all group relative overflow-hidden">
+                        
+                        <div id="ktp-state-empty" class="text-center p-6">
+                            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm text-primary-500 group-hover:scale-110 transition-transform">
+                                <i data-lucide="camera" class="w-8 h-8"></i>
+                            </div>
+                            <h3 class="font-bold text-primary-700 mb-1">Scan KTP</h3>
+                            <p class="text-xs text-primary-400">Pastikan tulisan terbaca jelas</p>
+                        </div>
+
+                        <div id="ktp-state-success" class="hidden text-center p-6 absolute inset-0 bg-primary-50 flex-col items-center justify-center w-full h-full">
+                            <div class="w-20 h-20 bg-white border-4 border-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg text-green-500 animate-bounce">
+                                <i data-lucide="check-circle" class="w-10 h-10 fill-green-500 text-white"></i>
+                            </div>
+                            <h3 class="font-bold text-primary-800 text-lg mb-1">KTP Berhasil Diupload</h3>
+                            <p class="text-xs text-primary-500">Ketuk untuk ubah foto</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fixed bottom-0 left-0 right-0 p-6 bg-white border-t border-slate-100 max-w-md mx-auto">
+                    <button id="btn-finish-reg" disabled class="w-full bg-slate-200 text-slate-400 py-4 rounded-xl font-bold text-lg cursor-not-allowed transition-all">
+                        Selesaikan Pendaftaran
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="page-login" class="page-section hidden fade-in">
             <div class="min-h-screen flex items-center justify-center p-6 bg-white">
                 <div class="w-full">
                     <div class="text-center mb-10">
                         <div class="mb-6 flex justify-center">
-                           <div class="w-24 h-24 bg-primary-100 rounded-full flex items-center justify-center text-4xl">🚀</div>
+                            <img src="Group 1.png" alt="Anuin Logo" class="h-24 mx-auto mb-8 object-contain">
+
                         </div>
                         <h1 class="text-4xl font-extrabold text-primary-700 mb-2">ANUIN</h1>
                         <p class="text-slate-500 font-medium">Jembatan Tepercaya untuk Jasa Anda</p>
@@ -390,6 +733,65 @@
             <div class="p-6 space-y-5" id="history-list-container"></div>
         </div>
 
+        <div id="page-history-detail" class="page-section hidden fade-in bg-slate-50 min-h-screen pb-24">
+            <div class="bg-gradient-to-br from-primary-600 to-indigo-600 text-white p-6 pt-8 pb-10 rounded-b-[2.5rem] shadow-soft">
+                <div class="flex items-center gap-4">
+                    <button onclick="navigateTo('page-history')" class="hover:bg-white/20 p-2 rounded-full"><i data-lucide="chevron-left" class="w-7 h-7"></i></button>
+                    <h2 class="text-2xl font-bold">Detail Pesanan</h2>
+                </div>
+            </div>
+            
+            <div class="p-6 relative -mt-6 z-10">
+                <div class="bg-white rounded-[2rem] p-8 shadow-lg border border-slate-100 text-center mb-6">
+                    <div id="hist-detail-icon-container" class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
+                        <i id="hist-detail-icon" data-lucide="check-circle" class="w-12 h-12 text-green-600"></i>
+                    </div>
+                    <h3 id="hist-detail-status" class="text-2xl font-extrabold text-slate-800 mb-1">Selesai</h3>
+                    <p id="hist-detail-date" class="text-slate-500 font-medium text-sm">12 Okt 2024 • 14:30</p>
+                </div>
+
+                <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 space-y-6">
+                    <div class="flex items-start gap-4 pb-4 border-b border-slate-50">
+                        <div class="w-12 h-12 bg-primary-50 rounded-full flex items-center justify-center text-xl shrink-0">🛠️</div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Layanan</p>
+                            <p id="hist-detail-service" class="font-bold text-lg text-slate-800">Nama Layanan</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4 pb-4 border-b border-slate-50">
+                        <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center text-xl shrink-0">👨‍🔧</div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Penyedia Jasa</p>
+                            <p id="hist-detail-worker" class="font-bold text-lg text-slate-800">Nama Pekerja</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4 pb-4 border-b border-slate-50">
+                         <div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-xl shrink-0">💰</div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Total Biaya</p>
+                            <p id="hist-detail-price" class="font-bold text-xl text-primary-700">Rp 0</p>
+                        </div>
+                    </div>
+
+                     <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-orange-50 rounded-full flex items-center justify-center text-xl shrink-0">📍</div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Lokasi Pengerjaan</p>
+                            <p class="font-medium text-slate-700 text-sm leading-relaxed">Jl. Teknik Kimia, Perumahan Dosen Blok A, Surabaya</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fixed bottom-0 left-0 right-0 p-6 bg-white/90 backdrop-blur-md border-t border-slate-100 max-w-md mx-auto z-30 rounded-t-[2rem] shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
+                <button id="hist-btn-reorder" class="w-full bg-gradient-to-r from-primary-600 to-primary-500 text-white py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-primary-500/30 active:scale-[0.98] transition-all flex justify-center items-center gap-2">
+                    <i data-lucide="rotate-cw" class="w-5 h-5"></i> Pesan Lagi
+                </button>
+            </div>
+        </div>
+
         <div id="page-profile" class="page-section hidden fade-in bg-slate-50 min-h-screen pb-24">
             <div class="bg-gradient-to-br from-primary-600 to-indigo-600 text-white p-6 pt-8 pb-20 rounded-b-[2.5rem] shadow-soft relative overflow-hidden">
                 <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
@@ -519,11 +921,30 @@
                 </button>
             </div>
         </div>
+        <div id="bottom-nav-mitra" class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur border-t max-w-md mx-auto rounded-t-[2rem] hidden z-40 pb-2 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
+            <div class="flex justify-around items-center py-4">
+                <button onclick="navigateTo('page-home-mitra')" id="nav-mitra-home" class="nav-btn-mitra flex flex-col items-center gap-1 text-primary-600 transition-colors">
+                    <i data-lucide="layout-grid" class="w-6 h-6"></i><span class="text-[10px] font-bold uppercase">Beranda</span>
+                </button>
+                
+                <button onclick="navigateTo('page-orders-mitra')" id="nav-mitra-orders" class="nav-btn-mitra flex flex-col items-center gap-1 text-slate-400 hover:text-primary-600 transition-colors">
+                    <i data-lucide="clipboard-list" class="w-6 h-6"></i><span class="text-[10px] font-bold uppercase">Pesanan</span>
+                </button>
+
+                <button onclick="navigateTo('page-shop-mitra')" id="nav-mitra-shop" class="nav-btn-mitra flex flex-col items-center gap-1 text-slate-400 hover:text-primary-600 transition-colors">
+                    <i data-lucide="store" class="w-6 h-6"></i><span class="text-[10px] font-bold uppercase">Lapak</span>
+                </button>
+                
+                <button onclick="navigateTo('page-wallet-mitra')" id="nav-mitra-wallet" class="nav-btn-mitra flex flex-col items-center gap-1 text-slate-400 hover:text-primary-600 transition-colors">
+                    <i data-lucide="wallet" class="w-6 h-6"></i><span class="text-[10px] font-bold uppercase">Dompet</span>
+                </button>
+            </div>
+        </div>
 
     </div>
 
     <script>
-        // DATA WORKERS STANDARD
+        // --- 1. DATA LENGKAP (TIDAK DIKURANGI) ---
         const workers = [
             { id: 1, name: 'Budi Santoso', service: 'Servis AC', rating: 4.8, price: 'Rp 75.000', location: 'Keputih, 1.2 km', image: '👨‍🔧' },
             { id: 2, name: 'Ahmad Yani', service: 'Listrik', rating: 4.9, price: 'Rp 60.000', location: 'Gebang, 0.8 km', image: '⚡' },
@@ -535,7 +956,7 @@
             { id: 8, name: 'Kang Ujang', service: 'Tukang Kayu', rating: 4.8, price: 'Rp 80.000', location: 'Rungkut, 2.0 km', image: '🪵' },
         ];
 
-        // [UPDATE] 20 JASA SPESIFIK (GIG MARKET)
+        // DATA GIG MARKET (LENGKAP 20 ITEM)
         const customGigs = [
             { id: 101, title: 'Joki Tugas Kuliah', provider: 'Kak Dinda', price: 'Rp 50rb', image: '📚', time: 'Baru saja', rating: 5.0, location: 'Kampus ITS' },
             { id: 102, title: 'Pasang Galon', provider: 'Mas Adi', price: 'Rp 10rb', image: '💧', time: '2 menit lalu', rating: 4.8, location: 'Gubeng' },
@@ -554,7 +975,7 @@
             { id: 115, title: 'Mandikan Kucing', provider: 'Cat Lover', price: 'Rp 40rb', image: '🐱', time: '2 jam lalu', rating: 4.9, location: 'Dharmawangsa' },
             { id: 116, title: 'Fotografer Wisuda', provider: 'Lens Pro', price: 'Rp 200rb', image: '📸', time: '3 jam lalu', rating: 4.8, location: 'Graha ITS' },
             { id: 117, title: 'Guru Les Privat', provider: 'Kak Sarah', price: 'Rp 60rb', image: '📝', time: '4 jam lalu', rating: 5.0, location: 'Manyar' },
-            { id: 118, title: 'Buat Website', provider: 'Dev Code', price: 'Rp 500rb', image: '🌐', time: '5 jam lalu', rating: 4.9, location: 'Online' },
+            { id: 118, title: 'Buat Website', provider: 'Dev Code', price: 'Rp 50rb', image: '🌐', time: '5 jam lalu', rating: 4.9, location: 'Online' },
             { id: 119, title: 'Ojek Barang', provider: 'Cepat Sampai', price: 'Rp 20rb', image: '🏍️', time: '6 jam lalu', rating: 4.7, location: 'Surabaya Timur' },
             { id: 120, title: 'Beli Makanan', provider: 'Jastip Kuliner', price: 'Rp 15rb', image: '🍔', time: '7 jam lalu', rating: 4.8, location: 'Surabaya Pusat' }
         ];
@@ -564,7 +985,6 @@
             { id: 2, name: 'Siti Nurhaliza', service: 'Bersih Rumah', lastMsg: 'Terima kasih kembali!', time: 'Kemarin', unread: 0, image: '🧹' },
         ];
 
-        // Data Riwayat Awal
         let historyData = [
             { id: 1, workerId: 1, worker: 'Budi Santoso', service: 'Servis AC', date: '15 Nov 2024', status: 'Selesai', rating: 5, price: 'Rp 75.000' },
             { id: 2, workerId: 2, worker: 'Ahmad Yani', service: 'Listrik', date: '10 Nov 2024', status: 'Selesai', rating: 5, price: 'Rp 60.000' },
@@ -579,53 +999,146 @@
             'Pasang CCTV': { image: 'https://images.unsplash.com/photo-1557862921-37829c790f19?q=80&w=800&auto=format&fit=crop', description: 'Instalasi CCTV.', preparation: 'Siapkan internet.' },
             'Pipa & Sanitasi': { image: 'https://images.unsplash.com/photo-1585704032915-c3400ca199e7?q=80&w=800&auto=format&fit=crop', description: 'Saluran mampet.', preparation: 'Bersihkan area.' },
             'Tukang Kayu': { image: 'https://images.unsplash.com/photo-1611244426581-723e11220446?q=80&w=800&auto=format&fit=crop', description: 'Furnitur custom.', preparation: 'Siapkan desain.' },
-            // Default untuk Custom Gig
             'Custom': { image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=800&auto=format&fit=crop', description: 'Jasa spesifik sesuai permintaan.', preparation: 'Hubungi penyedia.' }
         };
+        // Database Semua Jasa yang Tersedia di Aplikasi
+        const masterServices = [
+            { id: 1, name: 'Servis AC', icon: '❄️', price: 'Rp 75.000' },
+            { id: 2, name: 'Instalasi Listrik', icon: '⚡', price: 'Rp 60.000' },
+            { id: 3, name: 'Bersih Rumah', icon: '🧹', price: 'Rp 50.000' },
+            { id: 4, name: 'Jasa Angkut', icon: '📦', price: 'Rp 100.000' },
+            { id: 5, name: 'Perbaikan Atap', icon: '🏠', price: 'Rp 120.000' },
+            { id: 6, name: 'Pasang CCTV', icon: '📹', price: 'Rp 150.000' },
+            { id: 7, name: 'Perbaikan Pipa', icon: '🚰', price: 'Rp 80.000' },
+            { id: 8, name: 'Tukang Kayu', icon: '🪵', price: 'Rp 90.000' },
+            { id: 9, name: 'Cat Tembok', icon: '🎨', price: 'Rp 40.000' }
+        ];
 
         let selectedWorker = null;
         let currentActiveService = '';
+        // Jasa yang SAAT INI dimiliki Mitra (Awalnya cuma 1)
+        let myServices = [
+            { id: 1, name: 'Servis AC', icon: '❄️', price: 'Rp 75.000', active: true }
+        ];
 
+        // State untuk menyimpan pilihan sementara di halaman Tambah Jasa
+        let selectedServiceIds = [];
+
+        // --- 2. SISTEM NAVIGASI PUSAT (FIX UTAMA) ---
         function navigateTo(pageId) {
+            // Sembunyikan semua page
             document.querySelectorAll('.page-section').forEach(page => page.classList.add('hidden'));
-            document.getElementById(pageId).classList.remove('hidden');
+            
+            // Tampilkan page tujuan
+            const targetPage = document.getElementById(pageId);
+            if(targetPage) targetPage.classList.remove('hidden');
+            
             window.scrollTo(0,0);
 
-            const nav = document.getElementById('bottom-nav');
-            const mainPages = ['page-home', 'page-chat-list', 'page-search', 'page-history', 'page-profile'];
+            // Logika Navbar
+            const navCustomer = document.getElementById('bottom-nav');
+            const navMitra = document.getElementById('bottom-nav-mitra');
+
+            // List Page Customer
+            const customerPages = ['page-home', 'page-chat-list', 'page-search', 'page-history', 'page-profile', 'page-detail', 'page-booking', 'page-booking-success', 'page-service-info', 'page-edit-profile', 'page-generic-info', 'page-worker-list', 'page-history-detail'];
             
-            if (mainPages.includes(pageId)) {
-                nav.classList.remove('hidden');
+            // List Page Mitra (SUDAH DITAMBAH DOMPET)
+            const mitraPages = ['page-home-mitra', 'page-wallet-mitra', 'page-orders-mitra', 'page-shop-mitra'];
+
+            // Reset Navbar
+            navCustomer.classList.add('hidden');
+            navMitra.classList.add('hidden');
+
+            if (customerPages.includes(pageId)) {
+                navCustomer.classList.remove('hidden');
                 updateActiveNav(pageId);
                 
                 if(pageId === 'page-history') renderHistory();
                 if(pageId === 'page-chat-list') renderChatList();
                 if(pageId === 'page-search') renderCustomServices(); 
-            } else {
-                nav.classList.add('hidden');
+            } 
+            else if (mitraPages.includes(pageId)) {
+                navMitra.classList.remove('hidden');
+                updateActiveNavMitra(pageId); // Highlight nav mitra
             }
 
             if(typeof lucide !== 'undefined') lucide.createIcons();
+            if (pageId === 'page-shop-mitra') {
+                renderMyShop(); // Render ulang saat membuka lapak saya
+            }
         }
 
+        // --- 3. HELPER FUNCTIONS ---
         function updateActiveNav(pageId) {
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('text-primary-600');
                 btn.classList.add('text-slate-400');
             });
+            const map = { 'page-home': 'nav-home', 'page-chat-list': 'nav-search', 'page-search': 'nav-search', 'page-history': 'nav-history', 'page-profile': 'nav-profile' };
+            const activeId = map[pageId];
+            if(document.getElementById(activeId)) {
+                document.getElementById(activeId).classList.remove('text-slate-400');
+                document.getElementById(activeId).classList.add('text-primary-600');
+            }
+        }
+
+        // --- UPDATE FUNGSI updateActiveNavMitra ---
+        function updateActiveNavMitra(pageId) {
+            document.querySelectorAll('.nav-btn-mitra').forEach(btn => {
+                btn.classList.remove('text-primary-600');
+                btn.classList.add('text-slate-400');
+            });
+
+            // Mapping Baru
             const map = { 
-                'page-home': 'nav-home', 
-                'page-chat-list': 'nav-chat', // Update: Chat di Nav Bawah
-                'page-history': 'nav-history', 
-                'page-profile': 'nav-profile',
-                'page-search': 'nav-search'
+                'page-home-mitra': 'nav-mitra-home',
+                'page-wallet-mitra': 'nav-mitra-wallet',
+                'page-orders-mitra': 'nav-mitra-orders', // Mapping Pesanan
+                'page-shop-mitra': 'nav-mitra-shop'      // Mapping Lapak
             };
+            
             const activeId = map[pageId];
             const activeBtn = document.getElementById(activeId);
+            
             if(activeBtn) {
                 activeBtn.classList.remove('text-slate-400');
                 activeBtn.classList.add('text-primary-600');
             }
+        }
+        // --- TAMBAHKAN FUNGSI LOGIKA PESANAN (BARU) ---
+        function acceptOrder(cardId) {
+            const card = document.getElementById(cardId);
+            if(confirm('Terima pekerjaan ini?')) {
+                // Animasi visual
+                card.style.opacity = '0.5';
+                setTimeout(() => {
+                    card.innerHTML = `
+                        <div class="text-center py-8">
+                            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 animate-bounce">
+                                <i data-lucide="check" class="w-8 h-8 text-green-600"></i>
+                            </div>
+                            <h3 class="font-bold text-slate-800">Pekerjaan Diterima!</h3>
+                            <p class="text-xs text-slate-500 mt-1">Silakan menuju lokasi pelanggan.</p>
+                        </div>
+                    `;
+                    card.style.opacity = '1';
+                    lucide.createIcons();
+                }, 500);
+            }
+        }
+
+        function rejectOrder(cardId) {
+            const card = document.getElementById(cardId);
+            if(confirm('Tolak pekerjaan ini?')) {
+                card.classList.add('hidden'); // Sembunyikan kartu
+                alert('Pekerjaan ditolak.');
+            }
+        }
+
+        // --- 4. LOGIN FLOW ---
+        function selectRole(role) {
+            if (role === 'mitra') navigateTo('page-login-mitra');
+            else navigateTo('page-login');
         }
 
         function loginUser() {
@@ -634,12 +1147,32 @@
             navigateTo('page-home');
         }
 
-        function showGenericPage(title) {
-            document.getElementById('generic-title').innerText = title;
-            document.getElementById('generic-text').innerText = title;
-            navigateTo('page-generic-info');
+        function loginMitra() {
+            navigateTo('page-home-mitra');
         }
 
+        function logoutMitra() {
+            if(confirm("Apakah Anda yakin ingin keluar dari akun Mitra?")) {
+                navigateTo('page-role-selection');
+            }
+        }
+
+        // --- 5. LOGIKA MITRA ---
+        function toggleOnlineStatus(el) {
+            const knob = document.getElementById('mitra-status-knob');
+            const text = document.getElementById('mitra-status-text');
+            if (knob.classList.contains('translate-x-16')) { 
+                knob.classList.remove('translate-x-16'); knob.classList.add('translate-x-1');
+                el.classList.remove('bg-primary-800'); el.classList.add('bg-slate-400');
+                text.innerText = "OFFLINE"; text.classList.remove('left-3'); text.classList.add('right-3');
+            } else {
+                knob.classList.add('translate-x-16'); knob.classList.remove('translate-x-1');
+                el.classList.add('bg-primary-800'); el.classList.remove('bg-slate-400');
+                text.innerText = "ONLINE"; text.classList.add('left-3'); text.classList.remove('right-3');
+            }
+        }
+
+        // --- 6. LOGIKA CUSTOMER ---
         function filterService(serviceName) {
             currentActiveService = serviceName;
             const content = serviceContent[serviceName] || serviceContent['Servis AC'];
@@ -658,23 +1191,14 @@
         function renderWorkers(filterText = '') {
             const container = document.getElementById('worker-list-container');
             container.innerHTML = ''; 
+            const filtered = workers.filter(w => filterText === '' || w.service.toLowerCase().includes(filterText.toLowerCase()) || w.name.toLowerCase().includes(filterText.toLowerCase()));
 
-            const filtered = workers.filter(w => 
-                filterText === '' || 
-                w.service.toLowerCase().includes(filterText.toLowerCase()) || 
-                w.name.toLowerCase().includes(filterText.toLowerCase())
-            );
-
-            if(filtered.length === 0) {
-                container.innerHTML = '<p class="text-center text-slate-400 mt-10">Tidak ada penyedia jasa ditemukan.</p>';
-                return;
-            }
+            if(filtered.length === 0) { container.innerHTML = '<p class="text-center text-slate-400 mt-10">Tidak ada penyedia jasa ditemukan.</p>'; return; }
 
             filtered.forEach(worker => {
                 const card = document.createElement('button');
                 card.className = "w-full bg-white rounded-[1.5rem] p-5 shadow-sm hover:shadow-md transition-all border border-slate-100 active:scale-[0.99] text-left mb-4";
                 card.onclick = () => showWorkerDetail(worker);
-                
                 card.innerHTML = `
                     <div class="flex gap-4 items-start">
                         <div class="w-20 h-20 bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl flex items-center justify-center text-4xl shrink-0 shadow-inner">${worker.image}</div>
@@ -682,203 +1206,122 @@
                             <h3 class="font-bold text-xl text-slate-800">${worker.name}</h3>
                             <p class="text-primary-600 font-bold text-xs bg-primary-50 inline-block px-2 py-1 rounded-full mb-2">${worker.service}</p>
                             <div class="flex items-center gap-2 text-sm text-slate-500 mb-1">
-                                <i data-lucide="star" class="w-4 h-4 text-accent-500 fill-accent-500"></i>
-                                <span class="font-bold text-slate-800">${worker.rating}</span>
+                                <i data-lucide="star" class="w-4 h-4 text-accent-500 fill-accent-500"></i><span class="font-bold text-slate-800">${worker.rating}</span>
                                 <span>| ${worker.location}</span>
                             </div>
                             <p class="text-primary-700 font-extrabold text-lg">${worker.price}<span class="text-xs font-normal text-slate-400">/jam</span></p>
                         </div>
-                    </div>
-                `;
+                    </div>`;
                 container.appendChild(card);
             });
             lucide.createIcons();
         }
 
-        // [UPDATE] Render Custom Gigs dengan konsep Bridge ke Detail
         function renderCustomServices() {
             const container = document.getElementById('custom-services-container');
             const inputVal = document.getElementById('custom-search-input').value.toLowerCase();
             container.innerHTML = '';
-
             const filteredGigs = customGigs.filter(gig => gig.title.toLowerCase().includes(inputVal));
 
-            if(filteredGigs.length === 0) {
-                 container.innerHTML = '<p class="col-span-2 text-center text-slate-400 mt-4">Jasa tidak ditemukan.</p>';
-                 return;
-            }
+            if(filteredGigs.length === 0) { container.innerHTML = '<p class="col-span-2 text-center text-slate-400 mt-4">Jasa tidak ditemukan.</p>'; return; }
 
             filteredGigs.forEach(gig => {
                 const card = document.createElement('div');
-                // Style Kartu: Service Title Highlighted
                 card.className = "bg-green-50 p-5 rounded-[1.5rem] border border-green-100 flex flex-col items-center text-center shadow-sm hover:shadow-md transition cursor-pointer active:scale-95 relative overflow-hidden";
                 card.innerHTML = `
                     <div class="absolute top-0 right-0 bg-green-200 text-green-800 text-[9px] font-bold px-2 py-1 rounded-bl-lg">${gig.time}</div>
                     <div class="text-4xl mb-3 mt-2">${gig.image}</div>
                     <h4 class="font-extrabold text-slate-800 text-base mb-1 leading-tight">${gig.title}</h4>
                     <p class="text-[10px] text-slate-500 mb-2">Oleh: ${gig.provider}</p>
-                    <p class="text-primary-700 font-extrabold text-sm">${gig.price}<span class="text-[10px] font-normal text-slate-400">/jam</span></p>
-                `;
-                card.onclick = () => {
-                    // Mapping gig data to worker format for detail view
-                    const gigWorker = {
-                        name: gig.provider,
-                        service: gig.title,
-                        rating: gig.rating,
-                        price: gig.price,
-                        location: gig.location,
-                        image: gig.image
-                    };
-                    showWorkerDetail(gigWorker);
-                }
+                    <p class="text-primary-700 font-extrabold text-sm">${gig.price}<span class="text-[10px] font-normal text-slate-400">/jam</span></p>`;
+                card.onclick = () => { showWorkerDetail({ name: gig.provider, service: gig.title, rating: gig.rating, price: gig.price, location: gig.location, image: gig.image }); }
                 container.appendChild(card);
             });
         }
-
-        function filterCustomServices() {
-            renderCustomServices();
-        }
-
-        // [UPDATE] Render History
-        function renderHistory() {
-            const container = document.getElementById('history-list-container');
-            container.innerHTML = '';
-            
-            // Sort history by date (newest first - simulated by reversing or adding to top)
-            // historyData.reverse(); // Opsional jika ingin urutan dibalik
-
-            historyData.forEach(order => {
-                const card = document.createElement('div');
-                card.className = "bg-white rounded-[1.5rem] p-5 shadow-sm border border-slate-100 mb-4";
-                
-                let starsHTML = '';
-                // Jika status selesai, tampilkan bintang
-                if (order.status === 'Selesai') {
-                    for(let i=0; i<5; i++) {
-                        starsHTML += `<i data-lucide="star" class="w-4 h-4 ${i < order.rating ? 'text-accent-500 fill-accent-500' : 'text-slate-200'}"></i>`;
-                    }
-                } else {
-                     starsHTML = `<span class="text-xs text-slate-400 italic">Menunggu rating</span>`;
-                }
-
-                // Warna badge status
-                let statusClass = order.status === 'Selesai' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700';
-
-                card.innerHTML = `
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <p class="font-bold text-lg text-slate-800">${order.worker}</p>
-                            <p class="text-primary-600 font-bold text-xs bg-primary-50 inline-block px-2 py-1 rounded-full mt-1">${order.service}</p>
-                        </div>
-                        <span class="${statusClass} text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider">${order.status}</span>
-                    </div>
-                    <div class="flex items-center gap-4 text-sm text-slate-600 font-medium mb-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                        <div class="flex items-center gap-1"><i data-lucide="calendar" class="w-4 h-4 text-primary-400"></i><span>${order.date}</span></div>
-                        <div class="w-px h-4 bg-slate-300"></div>
-                        <div class="font-bold text-slate-800">${order.price}</div>
-                    </div>
-                    <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
-                        <span class="text-xs text-slate-500 font-medium">Rating:</span>
-                        <div class="flex gap-0.5 items-center">${starsHTML}</div>
-                    </div>
-                    <button onclick="reOrder('${order.worker}', '${order.service}', '${order.price}', '${order.workerId || 0}')" class="w-full mt-4 bg-white text-primary-700 py-3 rounded-xl font-bold border border-primary-200 hover:bg-primary-50 transition active:scale-[0.98]">Pesan Lagi</button>
-                `;
-                container.appendChild(card);
-            });
-            lucide.createIcons();
-        }
-
-        // Fungsi Pesan Lagi
-        function reOrder(name, service, price, id) {
-             // Mockup object worker untuk re-order
-             const worker = {
-                name: name,
-                service: service,
-                price: price.replace('/jam', ''), // Bersihkan format
-                rating: 4.8, // Default
-                location: 'Lokasi',
-                image: '👨‍🔧'
-             };
-             showWorkerDetail(worker);
-        }
-
-        function renderChatList() {
-            const container = document.getElementById('chat-list-container');
-            container.innerHTML = '';
-
-            chats.forEach(chat => {
-                const div = document.createElement('div');
-                div.className = "flex items-center gap-4 p-4 bg-white rounded-2xl shadow-sm border border-slate-100 cursor-pointer active:scale-[0.98] transition";
-                div.onclick = () => {
-                    selectedWorker = { name: chat.name, service: chat.service }; 
-                    startChat();
-                };
-
-                const badge = chat.unread > 0 ? `<div class="bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">${chat.unread}</div>` : '';
-
-                div.innerHTML = `
-                    <div class="w-14 h-14 bg-primary-100 rounded-full flex items-center justify-center text-2xl shrink-0">${chat.image}</div>
-                    <div class="flex-1 min-w-0">
-                        <div class="flex justify-between items-baseline mb-1">
-                            <h4 class="font-bold text-slate-800 truncate">${chat.name}</h4>
-                            <span class="text-[10px] text-slate-400 font-medium">${chat.time}</span>
-                        </div>
-                        <p class="text-xs text-primary-600 font-bold mb-1">${chat.service}</p>
-                        <p class="text-sm text-slate-500 truncate ${chat.unread > 0 ? 'font-bold text-slate-800' : ''}">${chat.lastMsg}</p>
-                    </div>
-                    ${badge}
-                `;
-                container.appendChild(div);
-            });
-        }
+        function filterCustomServices() { renderCustomServices(); }
 
         function showWorkerDetail(worker) {
             selectedWorker = worker;
             document.getElementById('detail-name').innerText = worker.name;
             document.getElementById('detail-service').innerText = worker.service;
             document.getElementById('detail-rating').innerText = worker.rating;
-            // Handle price format consistency
             document.getElementById('detail-price').innerText = worker.price.includes('/jam') ? worker.price : worker.price + "/jam";
             document.getElementById('detail-location').innerText = worker.location;
             document.getElementById('detail-image').innerText = worker.image;
-            
             document.getElementById('booking-worker-name').innerText = worker.name;
             document.getElementById('booking-worker-service').innerText = worker.service;
             document.getElementById('booking-worker-image').innerText = worker.image;
-
             navigateTo('page-detail');
         }
 
-        // [UPDATE] Submit Booking Logic -> Push ke History
         function submitBooking() {
-            // 1. Ambil data saat ini
             const date = new Date();
             const formattedDate = date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear();
-            
-            // 2. Buat objek history baru
-            const newOrder = {
-                id: Date.now(), // Unique ID
-                worker: selectedWorker.name,
-                service: selectedWorker.service,
-                date: formattedDate,
-                status: 'Menunggu', // Status awal
-                rating: 0, // Belum dirating
-                price: selectedWorker.price.replace('/jam', '')
-            };
-
-            // 3. Masukkan ke array history (paling atas)
+            const newOrder = { id: Date.now(), worker: selectedWorker.name, service: selectedWorker.service, date: formattedDate, status: 'Menunggu', rating: 0, price: selectedWorker.price.replace('/jam', '') };
             historyData.unshift(newOrder);
-
-            // 4. Pindah halaman
             navigateTo('page-booking-success');
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('history-list-container');
+            container.innerHTML = '';
+            historyData.forEach(order => {
+                let statusClass = order.status === 'Selesai' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700';
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-[1.5rem] p-5 shadow-sm border border-slate-100 mb-4";
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div><p class="font-bold text-lg text-slate-800">${order.worker}</p><p class="text-primary-600 font-bold text-xs bg-primary-50 inline-block px-2 py-1 rounded-full mt-1">${order.service}</p></div>
+                        <span class="${statusClass} text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider">${order.status}</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-sm text-slate-600 font-medium mb-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <div class="flex items-center gap-1"><i data-lucide="calendar" class="w-4 h-4 text-primary-400"></i><span>${order.date}</span></div>
+                        <div class="w-px h-4 bg-slate-300"></div><div class="font-bold text-slate-800">${order.price}</div>
+                    </div>
+                    <button onclick="openHistoryDetail(${order.id})" class="w-full mt-4 bg-white text-primary-700 py-3 rounded-xl font-bold border border-primary-200 hover:bg-primary-50 transition active:scale-[0.98] flex items-center justify-center gap-2"><i data-lucide="file-text" class="w-4 h-4"></i> Lihat Detail</button>`;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function openHistoryDetail(id) {
+            const order = historyData.find(o => o.id === id);
+            if (!order) return;
+            document.getElementById('hist-detail-status').innerText = order.status;
+            document.getElementById('hist-detail-date').innerText = order.date;
+            document.getElementById('hist-detail-service').innerText = order.service;
+            document.getElementById('hist-detail-worker').innerText = order.worker;
+            document.getElementById('hist-detail-price').innerText = order.price;
+            
+            const iconContainer = document.getElementById('hist-detail-icon-container');
+            if (order.status === 'Selesai') {
+                iconContainer.className = "w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner";
+                iconContainer.innerHTML = `<i data-lucide="check-circle" class="w-12 h-12 text-green-600"></i>`;
+            } else {
+                iconContainer.className = "w-24 h-24 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner";
+                iconContainer.innerHTML = `<i data-lucide="clock" class="w-12 h-12 text-yellow-600"></i>`;
+            }
+            document.getElementById('hist-btn-reorder').onclick = function() { showWorkerDetail({ name: order.worker, service: order.service, price: order.price.replace('/jam', ''), rating: 4.8, location: 'Lokasi', image: '👨‍🔧' }); };
+            navigateTo('page-history-detail');
+        }
+
+        function renderChatList() {
+            const container = document.getElementById('chat-list-container');
+            container.innerHTML = '';
+            chats.forEach(chat => {
+                const div = document.createElement('div');
+                div.className = "flex items-center gap-4 p-4 bg-white rounded-2xl shadow-sm border border-slate-100 cursor-pointer active:scale-[0.98] transition";
+                div.onclick = () => { selectedWorker = { name: chat.name, service: chat.service }; startChat(); };
+                const badge = chat.unread > 0 ? `<div class="bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">${chat.unread}</div>` : '';
+                div.innerHTML = `<div class="w-14 h-14 bg-primary-100 rounded-full flex items-center justify-center text-2xl shrink-0">${chat.image}</div><div class="flex-1 min-w-0"><div class="flex justify-between items-baseline mb-1"><h4 class="font-bold text-slate-800 truncate">${chat.name}</h4><span class="text-[10px] text-slate-400 font-medium">${chat.time}</span></div><p class="text-xs text-primary-600 font-bold mb-1">${chat.service}</p><p class="text-sm text-slate-500 truncate ${chat.unread > 0 ? 'font-bold text-slate-800' : ''}">${chat.lastMsg}</p></div>${badge}`;
+                container.appendChild(div);
+            });
         }
 
         function startChat() {
             if(!selectedWorker) return;
             document.getElementById('chat-header-name').innerText = selectedWorker.name;
-            // [UPDATE] Tampilkan Service di Header Chat
             document.getElementById('chat-header-service').innerText = selectedWorker.service || 'Layanan';
-            
             document.getElementById('chat-container').innerHTML = ''; 
             addMessage('worker', 'Halo! Ada yang bisa saya bantu untuk jasa ' + (selectedWorker.service || 'ini') + '?');
             navigateTo('page-chat');
@@ -903,14 +1346,176 @@
             container.appendChild(div);
             container.scrollTop = container.scrollHeight;
         }
-
         document.getElementById('message-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage() });
 
+        function showGenericPage(title) {
+            document.getElementById('generic-title').innerText = title;
+            document.getElementById('generic-text').innerText = title;
+            navigateTo('page-generic-info');
+        }
+
+        function handleKTPUpload() {
+            const emptyState = document.getElementById('ktp-state-empty');
+            const successState = document.getElementById('ktp-state-success');
+            const btnFinish = document.getElementById('btn-finish-reg');
+            const uploadArea = document.getElementById('ktp-upload-area');
+            uploadArea.classList.add('animate-pulse'); 
+            
+            setTimeout(() => {
+                uploadArea.classList.remove('animate-pulse');
+                emptyState.classList.add('hidden');
+                successState.classList.remove('hidden'); successState.classList.add('flex');
+                uploadArea.classList.remove('border-dashed', 'border-primary-200');
+                uploadArea.classList.add('border-solid', 'border-primary-500');
+                btnFinish.disabled = false;
+                btnFinish.classList.remove('bg-slate-200', 'text-slate-400', 'cursor-not-allowed');
+                btnFinish.classList.add('bg-primary-600', 'text-white', 'hover:bg-primary-700', 'shadow-lg', 'shadow-primary-600/20', 'active:scale-[0.98]');
+                btnFinish.onclick = submitMitraRegistration; 
+            }, 800); 
+        }
+
+        function submitMitraRegistration() {
+            alert("Pendaftaran Berhasil! Silakan masuk dengan akun Anda.");
+            navigateTo('page-login-mitra');
+            document.getElementById('ktp-state-empty').classList.remove('hidden');
+            document.getElementById('ktp-state-success').classList.add('hidden');
+            document.getElementById('btn-finish-reg').disabled = true;
+            document.getElementById('btn-finish-reg').classList.add('bg-slate-200', 'text-slate-400');
+            document.getElementById('btn-finish-reg').classList.remove('bg-primary-600', 'text-white');
+        }
+
+        // --- INIT ---
         window.onload = function() {
             lucide.createIcons();
-            // Inisialisasi render history awal jika ada
-            // renderHistory();
+            const loadingBar = document.getElementById('loading-bar');
+            if(loadingBar) { setTimeout(() => { loadingBar.classList.remove('w-0'); loadingBar.classList.add('w-full'); }, 50); }
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('page-loading');
+                if(loadingScreen) {
+                    loadingScreen.style.opacity = '0';
+                    setTimeout(() => { loadingScreen.classList.add('hidden'); navigateTo('page-role-selection'); }, 500);
+                } else { navigateTo('page-role-selection'); }
+            }, 1200); 
         };
+        // --- LOGIKA HALAMAN LAPAK SAYA (DINAMIS) ---
+        
+        // 1. Render Halaman Lapak Saya (Menampilkan jasa yang sudah dimiliki)
+        function renderMyShop() {
+            const container = document.getElementById('shop-service-container'); // Nanti kita update HTML page-shop-mitra
+            if(!container) return;
+            
+            container.innerHTML = '';
+
+            myServices.forEach(srv => {
+                const isActive = srv.active !== false; // Default true
+                const card = document.createElement('div');
+                card.className = `bg-white p-5 rounded-[1.5rem] shadow-sm border border-slate-100 flex items-center gap-4 ${isActive ? '' : 'opacity-60 grayscale'}`;
+                card.innerHTML = `
+                    <div class="w-16 h-16 ${isActive ? 'bg-primary-50 text-primary-600' : 'bg-slate-100 text-slate-500'} rounded-2xl flex items-center justify-center text-3xl shrink-0">
+                        ${srv.icon}
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-slate-800 text-lg">${srv.name}</h3>
+                        <p class="${isActive ? 'text-primary-600' : 'text-slate-500'} font-bold">${srv.price}<span class="text-xs text-slate-400 font-normal">/jam</span></p>
+                    </div>
+                    <button onclick="alert('Menu edit untuk ${srv.name}')" class="p-2 hover:bg-slate-50 rounded-full text-slate-400">
+                        <i data-lucide="more-vertical" class="w-5 h-5"></i>
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // --- LOGIKA HALAMAN TAMBAH JASA ---
+
+        // 2. Buka Halaman Tambah Jasa & Render List Pilihan
+        function openAddServicePage() {
+            selectedServiceIds = []; // Reset pilihan
+            renderAddServiceList();
+            updateAddButtonState();
+            navigateTo('page-add-service');
+        }
+
+        // 3. Render List Pilihan (Hanya tampilkan yang BELUM dimiliki)
+        function renderAddServiceList() {
+            const container = document.getElementById('add-service-container');
+            container.innerHTML = '';
+
+            // Filter: Hanya tampilkan jasa yang belum ada di myServices
+            const ownedIds = myServices.map(s => s.id);
+            const availableToAdd = masterServices.filter(s => !ownedIds.includes(s.id));
+
+            if(availableToAdd.length === 0) {
+                container.innerHTML = `<div class="text-center py-10 text-slate-400"><p>Anda sudah menambahkan semua layanan yang tersedia!</p></div>`;
+                return;
+            }
+
+            availableToAdd.forEach(srv => {
+                const isSelected = selectedServiceIds.includes(srv.id);
+                const el = document.createElement('div');
+                
+                // Styling Card Selectable
+                el.className = `w-full p-4 rounded-2xl border flex items-center gap-4 cursor-pointer transition-all active:scale-[0.98] ${isSelected ? 'bg-green-50 border-green-500 ring-1 ring-green-500' : 'bg-white border-slate-200 hover:border-slate-300'}`;
+                el.onclick = () => toggleServiceSelection(srv.id);
+
+                el.innerHTML = `
+                    <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${isSelected ? 'border-green-500 bg-green-500' : 'border-slate-300 bg-white'}">
+                        ${isSelected ? '<i data-lucide="check" class="w-4 h-4 text-white"></i>' : ''}
+                    </div>
+                    
+                    <div class="text-2xl">${srv.icon}</div>
+                    
+                    <div class="font-bold text-slate-700">${srv.name}</div>
+                `;
+                container.appendChild(el);
+            });
+            lucide.createIcons();
+        }
+
+        // 4. Toggle Pilihan (Multi Select)
+        function toggleServiceSelection(id) {
+            if (selectedServiceIds.includes(id)) {
+                selectedServiceIds = selectedServiceIds.filter(itemId => itemId !== id); // Hapus jika sudah ada
+            } else {
+                selectedServiceIds.push(id); // Tambah jika belum ada
+            }
+            renderAddServiceList(); // Re-render untuk update tampilan checkbox
+            updateAddButtonState(); // Update tombol hijau
+        }
+
+        // 5. Update Status Tombol Tambah (Disabled/Enabled)
+        function updateAddButtonState() {
+            const btn = document.getElementById('btn-confirm-add-service');
+            if (selectedServiceIds.length > 0) {
+                // Enable: Warna Hijau
+                btn.disabled = false;
+                btn.className = "flex-[2] bg-green-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-green-600/30 hover:bg-green-700 active:scale-[0.98] transition-all";
+            } else {
+                // Disable: Warna Abu
+                btn.disabled = true;
+                btn.className = "flex-[2] bg-slate-200 text-slate-400 py-4 rounded-xl font-bold text-lg shadow-none cursor-not-allowed transition-all";
+            }
+        }
+
+        // 6. Simpan Jasa Baru ke 'myServices'
+        function saveNewServices() {
+            if(selectedServiceIds.length === 0) return;
+
+            // Ambil data detail dari masterServices berdasarkan ID yang dipilih
+            const newServicesToAdd = masterServices.filter(s => selectedServiceIds.includes(s.id));
+            
+            // Masukkan ke array myServices
+            myServices = [...myServices, ...newServicesToAdd];
+
+            // Feedback & Kembali
+            alert(`Berhasil menambahkan ${newServicesToAdd.length} jasa baru ke lapak Anda!`);
+            
+            // Render ulang halaman Lapak Saya agar data baru muncul
+            renderMyShop(); 
+            
+            navigateTo('page-shop-mitra');
+        }
     </script>
 </body>
 </html>
